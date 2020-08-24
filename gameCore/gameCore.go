@@ -63,7 +63,7 @@ type GameClient struct {
 	net.Conn
 	Pos       Position
 	Id        string
-	CoolDawn  int
+	CoolDown  int
 	canShoot  bool
 	HealPoint int64
 	isAttack  bool
@@ -77,7 +77,7 @@ func (g gameCore) AddClient(conn net.Conn, Id string) {
 	var newClient GameClient
 	newClient.Id = Id
 	newClient.Conn = conn
-	newClient.CoolDawn = 0
+	newClient.CoolDown = 0
 	newClient.isAttack = false
 	newClient.canShoot = true
 	newClient.HealPoint = startHealfPoint
@@ -139,9 +139,9 @@ func (g gameCore) WriteClientsData() {
 
 		//generate bullets position
 		//--cool dawn timers
-		g.Clients[id].CoolDawn++
-		if g.Clients[id].CoolDawn >= shootRate {
-			g.Clients[id].CoolDawn = 0
+		g.Clients[id].CoolDown++
+		if g.Clients[id].CoolDown >= shootRate {
+			g.Clients[id].CoolDown = 0
 			g.Clients[id].canShoot = true
 		} else {
 			g.Clients[id].canShoot = false
