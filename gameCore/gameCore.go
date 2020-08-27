@@ -18,7 +18,7 @@ var shootDistance = 40.0
 //var bulletSpeed = 2.5
 //var bulletLifeTime = 5
 var startHealfPoint int64 = 50
-var objectRadius float64 = 0.5 //0.4
+var objectRadius float64 = 1.1 //0.4
 var shootRate = 1
 
 type Position struct {
