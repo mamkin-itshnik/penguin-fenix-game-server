@@ -69,7 +69,7 @@ func main() {
 
 	//import costul
 	engine.Hello()
-	core.Hello()
+	core.StartServer(arg)
 	botsFather.Hello()
 
 	//OLD CODE

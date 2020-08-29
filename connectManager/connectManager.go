@@ -5,8 +5,6 @@ import (
 	"log"
 	"net"
 	"strconv"
-
-	"../core"
 )
 
 type Client struct {
@@ -15,17 +13,20 @@ type Client struct {
 }
 
 var Clients map[string]*Client
+var ConnectionChan chan string
 
 func init() {
 	fmt.Println("Create connectManager ")
 	Clients = make(map[string]*Client)
+	ConnectionChan = make(chan string)
 }
 
 func addClient(conn net.Conn, Id string) bool {
 	if _, ok := Clients[Id]; !ok {
 		var newClient Client
 		Clients[Id] = &newClient
-		core.AddPlayer(Id)
+		ConnectionChan <- Id
+		//core.AddPlayer(Id)
 		println("new client add!, now client count = ", len(Clients))
 		return true
 	} else {

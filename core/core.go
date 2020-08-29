@@ -2,7 +2,14 @@ package core
 
 import (
 	"fmt"
+
+	"../connectManager"
 )
+
+func StartServer(adress string) error {
+	go clientAccepter(connectManager.ConnectionChan)
+	return connectManager.StartServer(adress)
+}
 
 func Hello() {
 	fmt.Println("Hello, World!")
@@ -34,8 +41,15 @@ type Player struct {
 	Task
 }
 
-func AddPlayer(playerID string) {
+func clientAccepter(c chan string) {
+	for {
+		playerID := <-c
+		AddPlayer(playerID)
+	}
+}
 
+func AddPlayer(playerID string) {
+	fmt.Println("func AddPlayer(playerID string)")
 }
 func AddTask(playerID string, newTask Task) {
 	fmt.Println("Hello TASK!")
