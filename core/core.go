@@ -6,13 +6,9 @@ import (
 	"../connectManager"
 )
 
-func StartServer(adress string) error {
-	go clientAccepter(connectManager.ConnectionChan)
-	return connectManager.StartServer(adress)
-}
-
-func Hello() {
-	fmt.Println("Hello, World!")
+func StartServer(adress string) {
+	go taskAcceptor(connectManager.ConnectionChan)
+	connectManager.StartServer(adress)
 }
 
 func init() {
@@ -41,10 +37,20 @@ type Player struct {
 	Task
 }
 
-func clientAccepter(c chan string) {
+func taskAcceptor(c chan connectManager.Task) {
 	for {
-		playerID := <-c
-		AddPlayer(playerID)
+		newTask := <-c
+		switch newTask.TaskType {
+		case connectManager.ADDCLIENT:
+			AddPlayer(newTask.ClientID)
+		case connectManager.DELCLIENT:
+			fmt.Println("_________________ hui")
+		case connectManager.CLIENTMOVE:
+			// do something for
+		case connectManager.CLIENTSHOOT:
+			// do something for
+		}
+		//AddPlayer(playerID)
 	}
 }
 
