@@ -24,9 +24,8 @@ func startServer(adress string) error {
 	if err != nil {
 		fmt.Println("server error ", err)
 		return err
-	} else {
-		fmt.Println("server START on ", adress)
 	}
+	fmt.Println("server START on ", adress)
 	defer listener.Close()
 	for serverIsWork {
 		conn, err := listener.Accept()
@@ -49,7 +48,7 @@ func reciveDataFromClient() {
 	}
 }
 
-func sendDataaToClient() {
+func sendDataToClient() {
 	for {
 		gameCore.GetInstance().WriteClientsData()
 		time.Sleep(time.Millisecond * 100)
@@ -63,7 +62,7 @@ func main() {
 	go startServer(arg)
 	//go startServer("192.168.0.105:8080")
 	go reciveDataFromClient()
-	go sendDataaToClient()
+	go sendDataToClient()
 	//------- waiting like system "pause", but if call wg.Done() once anywhere program end // see
 	wg.Wait()
 }
