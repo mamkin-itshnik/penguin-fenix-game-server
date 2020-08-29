@@ -9,6 +9,10 @@ import (
 	"sync"
 	"time"
 
+	"./botsFather"
+	"./connectManager"
+	"./core"
+	"./engine"
 	"./gameCore"
 )
 
@@ -58,11 +62,21 @@ func sendDataToClient() {
 func main() {
 	serverIsWork = true
 	wg.Add(1)
+
 	arg := os.Args[1] //192.168.0.105:8080
-	go startServer(arg)
+
+	go connectManager.StartServer(arg)
+
+	//import costul
+	engine.Hello()
+	core.Hello()
+	botsFather.Hello()
+
+	//OLD CODE
+	/*go startServer(arg)
 	//go startServer("192.168.0.105:8080")
 	go reciveDataFromClient()
-	go sendDataToClient()
+	go sendDataToClient()*/
 	//------- waiting like system "pause", but if call wg.Done() once anywhere program end // see
 	wg.Wait()
 }

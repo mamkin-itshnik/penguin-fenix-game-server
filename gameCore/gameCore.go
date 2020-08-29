@@ -193,3 +193,7 @@ func GetInstance() *gameCore {
 	})
 	return instance
 }
+
+func init() {
+	fmt.Println("Create gameCore ")
+}
