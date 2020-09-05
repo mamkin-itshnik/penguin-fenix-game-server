@@ -1,4 +1,4 @@
-package engine
+package main
 
 import "fmt"
 
@@ -7,5 +7,5 @@ func Hello() {
 }
 
 func init() {
-	fmt.Println("Create engine ")
+	fmt.Println("Create botsFather ")
 }

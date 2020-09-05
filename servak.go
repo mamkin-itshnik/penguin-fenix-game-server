@@ -9,9 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"./botsFather"
-	"./core"
-	"./engine"
 	"./gameCore"
 )
 
@@ -65,11 +62,9 @@ func main() {
 	arg := os.Args[1] //192.168.0.105:8080
 
 	//go connectManager.StartServer(arg)
-	core.StartServer(arg)
+	StartServer_core(arg)
 
 	//import costul
-	engine.Hello()
-	botsFather.Hello()
 
 	//OLD CODE
 	/*go startServer(arg)

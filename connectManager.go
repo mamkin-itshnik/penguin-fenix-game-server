@@ -1,4 +1,4 @@
-package connectManager
+package main
 
 import (
 	"bufio"
@@ -9,25 +9,6 @@ import (
 	"strconv"
 	"strings"
 )
-
-type TaskID int
-
-const (
-	ADDCLIENT   = 0
-	DELCLIENT   = 1
-	CLIENTMOVE  = 2
-	CLIENTSHOOT = 3
-)
-
-type Client struct {
-	net.Conn
-	clientID string
-}
-
-type Task struct {
-	ClientID string
-	TaskType TaskID
-}
 
 var Clients map[string]*Client
 var ConnectionChan chan Task
@@ -61,7 +42,7 @@ func addClient(conn net.Conn, Id string) bool {
 	}
 }
 
-func StartServer(adress string) {
+func StartServer_CN(adress string) {
 	go runAcceptor(adress)
 	go readClientsData()
 	go writeClientData()
