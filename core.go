@@ -2,16 +2,27 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func core_StartServer(adress string) {
 	go core_taskAcceptor(TaskChan)
+	go core_TicTack()
 	CN_StartServer(adress)
 }
 
 func init() {
 	fmt.Println("Create core ")
 	players = make(map[string]Player)
+}
+
+func core_TicTack() {
+	for {
+		time.Sleep(time.Millisecond * 100)
+		for _, player := range players {
+			engine_SolveTask(&player)
+		}
+	}
 }
 
 func core_taskAcceptor(c chan Task) {
@@ -34,11 +45,7 @@ func core_taskAcceptor(c chan Task) {
 func core_setTask(newTask Task) {
 	player, ok := players[newTask.ClientID]
 	if ok {
-		for i := 0; i < TASKCOUNT; i++ {
-			if i == newTask.TaskType {
-				player.TaskArray[i] = newTask
-			}
-		}
+		player.TaskMap[newTask.TaskType] = newTask
 	}
 }
 func core_DelPlayer(playerID string) {
@@ -52,7 +59,7 @@ func core_AddPlayer(playerID string) {
 	_, ok := players[playerID]
 	if !ok {
 		var newPlayer Player
-		newPlayer.TaskArray = make([]Task, TASKCOUNT)
+		newPlayer.TaskMap = make(map[int]Task)
 		players[playerID] = newPlayer
 		fmt.Println("func AddPlayer(playerID string)")
 	}

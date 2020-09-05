@@ -31,7 +31,7 @@ type Task struct {
 
 type Player struct {
 	ClientState
-	TaskArray []Task
+	TaskMap map[int]Task
 }
 
 type Position struct {
