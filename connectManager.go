@@ -11,12 +11,12 @@ import (
 )
 
 var Clients map[string]*Client
-var ConnectionChan chan Task
+var TaskChan chan Task
 
 func init() {
 	fmt.Println("Create connectManager ")
 	Clients = make(map[string]*Client)
-	ConnectionChan = make(chan Task)
+	TaskChan = make(chan Task)
 }
 
 func CN_addClient(conn net.Conn, Id string) bool {
@@ -32,7 +32,7 @@ func CN_addClient(conn net.Conn, Id string) bool {
 		var newTask Task
 		newTask.TaskType = ADDCLIENT
 		newTask.ClientID = Id
-		ConnectionChan <- newTask
+		TaskChan <- newTask
 
 		println("new client add!, now client count = ", len(Clients))
 		return true
@@ -123,7 +123,7 @@ func CN_readClientsData() {
 					var newTask Task
 					newTask.TaskType = DELCLIENT
 					newTask.ClientID = cli.clientID
-					ConnectionChan <- newTask
+					TaskChan <- newTask
 					delete(Clients, cli.clientID)
 					//} else {
 					//	println("Socket close error ", sErr)

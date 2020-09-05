@@ -5,7 +5,7 @@ import (
 )
 
 func core_StartServer(adress string) {
-	go core_taskAcceptor(ConnectionChan)
+	go core_taskAcceptor(TaskChan)
 	CN_StartServer(adress)
 }
 
