@@ -12,6 +12,9 @@ const (
 	CLIENTSHOOT = 3
 	WRONGTASK   = 4
 )
+const (
+	TASKCOUNT = 5
+)
 
 //for ConnectManager.go
 type Client struct {
@@ -22,13 +25,13 @@ type Client struct {
 // ConnectManager.go + core.go  + engine.go
 type Task struct {
 	ClientID string
-	TaskType TaskID
+	TaskType int
 	TaskArgs []string
 }
 
 type Player struct {
 	ClientState
-	Task
+	TaskArray []Task
 }
 
 type Position struct {

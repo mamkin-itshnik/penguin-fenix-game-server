@@ -82,11 +82,11 @@ func CN_writeClientData() {
 func CN_readClientsData() {
 	for {
 		for id, cli := range Clients {
-			fmt.Println("___", cli.clientID)
+			//fmt.Println("___", cli.clientID)
 			message, err := bufio.NewReader(Clients[id].Conn).ReadString('\n')
 			if err == nil {
 
-				println("read client data: ", message)
+				//println("read client data: ", message)
 
 				var newTask Task = TP_makeTask(message, id)
 				TaskChan <- newTask
