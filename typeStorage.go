@@ -10,6 +10,7 @@ const (
 	DELCLIENT   = 1
 	CLIENTMOVE  = 2
 	CLIENTSHOOT = 3
+	WRONGTASK   = 4
 )
 
 //for ConnectManager.go

@@ -20,7 +20,7 @@ func core_taskAcceptor(c chan Task) {
 		case ADDCLIENT:
 			core_AddPlayer(newTask.ClientID)
 		case DELCLIENT:
-			fmt.Println("_________________ hui")
+			core_DelPlayer(newTask.ClientID)
 		case CLIENTMOVE:
 			// do something for
 		case CLIENTSHOOT:
@@ -30,6 +30,9 @@ func core_taskAcceptor(c chan Task) {
 	}
 }
 
+func core_DelPlayer(playerID string) {
+	fmt.Println("func core_DelPlayer(playerID string)")
+}
 func core_AddPlayer(playerID string) {
 	fmt.Println("func AddPlayer(playerID string)")
 }

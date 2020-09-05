@@ -7,7 +7,6 @@ import (
 	"log"
 	"net"
 	"strconv"
-	"strings"
 )
 
 var Clients map[string]*Client
@@ -22,6 +21,7 @@ func init() {
 func CN_addClient(conn net.Conn, Id string) bool {
 	if _, ok := Clients[Id]; !ok {
 
+		println("CN_addClient %s", Id)
 		//make client
 		var newClient Client
 		newClient.clientID = Id
@@ -33,6 +33,9 @@ func CN_addClient(conn net.Conn, Id string) bool {
 		newTask.TaskType = ADDCLIENT
 		newTask.ClientID = Id
 		TaskChan <- newTask
+
+		newmessage := "Init;" + Id + ";"
+		newClient.Conn.Write([]byte(newmessage))
 
 		println("new client add!, now client count = ", len(Clients))
 		return true
@@ -82,39 +85,15 @@ func CN_readClientsData() {
 			fmt.Println("___", cli.clientID)
 			message, err := bufio.NewReader(Clients[id].Conn).ReadString('\n')
 			if err == nil {
-				log.Printf("error accepting connection %v", err)
+
 				println("read client data: ", message)
 
-				strArr := strings.Split(message, ";")
-				if len(strArr) < 3 {
-					continue
-				}
-
-				//var dX, dY, nAngl float64
-				if strings.Contains(strArr[0], "XD") {
-					if strArr[1] == "X" {
-						//println("read client data: ", message)
-						//Clients[id].isAttack = false
-						continue
-					}
-					//Clients[id].isAttack = true
-					//nAngl, _ = strconv.ParseFloat(strArr[1], 32)
-					//Clients[id].Pos.ShootAngle = nAngl
-					continue
-				}
-
-				if len(strArr) > 3 {
-					//dX, _ = strconv.ParseFloat(strArr[1], 32)
-					//dY, _ = strconv.ParseFloat(strArr[2], 32)
-					//nAngl, _ = strconv.ParseFloat(strArr[3], 32)
-
-					/*	g.Clients[id].Pos.TryDeltaX = dX
-						g.Clients[id].Pos.TryDeltaY = dY
-						g.Clients[id].Pos.Angle = nAngl*/
-				}
+				var newTask Task = TP_makeTask(message, id)
+				TaskChan <- newTask
 			} else {
 				if err == io.EOF {
 					println("NewReader io.EOF", err)
+					println("NewReader io.EOF", err.Error())
 					//sErr := cli.Conn.Close
 					//if sErr == nil {
 					//	println("Socket close for ", cli.clientID)
