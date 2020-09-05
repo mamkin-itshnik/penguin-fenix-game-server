@@ -1,4 +1,4 @@
-package connectManager
+package main
 
 import (
 	"bufio"
@@ -7,40 +7,21 @@ import (
 	"log"
 	"net"
 	"strconv"
-	"strings"
 )
-
-type TaskID int
-
-const (
-	ADDCLIENT   = 0
-	DELCLIENT   = 1
-	CLIENTMOVE  = 2
-	CLIENTSHOOT = 3
-)
-
-type Client struct {
-	net.Conn
-	clientID string
-}
-
-type Task struct {
-	ClientID string
-	TaskType TaskID
-}
 
 var Clients map[string]*Client
-var ConnectionChan chan Task
+var TaskChan chan Task
 
 func init() {
 	fmt.Println("Create connectManager ")
 	Clients = make(map[string]*Client)
-	ConnectionChan = make(chan Task)
+	TaskChan = make(chan Task)
 }
 
-func addClient(conn net.Conn, Id string) bool {
+func CN_addClient(conn net.Conn, Id string) bool {
 	if _, ok := Clients[Id]; !ok {
 
+		println("CN_addClient %s", Id)
 		//make client
 		var newClient Client
 		newClient.clientID = Id
@@ -51,7 +32,10 @@ func addClient(conn net.Conn, Id string) bool {
 		var newTask Task
 		newTask.TaskType = ADDCLIENT
 		newTask.ClientID = Id
-		ConnectionChan <- newTask
+		TaskChan <- newTask
+
+		newmessage := "Init;" + Id + ";"
+		newClient.Conn.Write([]byte(newmessage))
 
 		println("new client add!, now client count = ", len(Clients))
 		return true
@@ -61,13 +45,13 @@ func addClient(conn net.Conn, Id string) bool {
 	}
 }
 
-func StartServer(adress string) {
-	go runAcceptor(adress)
-	go readClientsData()
-	go writeClientData()
+func CN_StartServer(adress string) {
+	go CN_runAcceptor(adress)
+	go CN_readClientsData()
+	go CN_writeClientData()
 }
 
-func runAcceptor(adress string) error {
+func CN_runAcceptor(adress string) error {
 	var i int
 	i = 0
 	log.Printf("try starting server on %v\n", adress)
@@ -83,7 +67,7 @@ func runAcceptor(adress string) error {
 		if err != nil {
 			log.Printf("error accepting connection %v", err)
 		} else {
-			addClient(conn, "ID_"+strconv.Itoa(i))
+			CN_addClient(conn, "ID_"+strconv.Itoa(i))
 			log.Println("accepted connection from ", conn.RemoteAddr())
 			i++
 		}
@@ -91,49 +75,25 @@ func runAcceptor(adress string) error {
 	return err
 }
 
-func writeClientData() {
+func CN_writeClientData() {
 
 }
 
-func readClientsData() {
+func CN_readClientsData() {
 	for {
 		for id, cli := range Clients {
-			fmt.Println("___", cli.clientID)
+			//fmt.Println("___", cli.clientID)
 			message, err := bufio.NewReader(Clients[id].Conn).ReadString('\n')
 			if err == nil {
-				log.Printf("error accepting connection %v", err)
-				println("read client data: ", message)
 
-				strArr := strings.Split(message, ";")
-				if len(strArr) < 3 {
-					continue
-				}
+				//println("read client data: ", message)
 
-				//var dX, dY, nAngl float64
-				if strings.Contains(strArr[0], "XD") {
-					if strArr[1] == "X" {
-						//println("read client data: ", message)
-						//Clients[id].isAttack = false
-						continue
-					}
-					//Clients[id].isAttack = true
-					//nAngl, _ = strconv.ParseFloat(strArr[1], 32)
-					//Clients[id].Pos.ShootAngle = nAngl
-					continue
-				}
-
-				if len(strArr) > 3 {
-					//dX, _ = strconv.ParseFloat(strArr[1], 32)
-					//dY, _ = strconv.ParseFloat(strArr[2], 32)
-					//nAngl, _ = strconv.ParseFloat(strArr[3], 32)
-
-					/*	g.Clients[id].Pos.TryDeltaX = dX
-						g.Clients[id].Pos.TryDeltaY = dY
-						g.Clients[id].Pos.Angle = nAngl*/
-				}
+				var newTask Task = TP_makeTask(message, id)
+				TaskChan <- newTask
 			} else {
 				if err == io.EOF {
 					println("NewReader io.EOF", err)
+					println("NewReader io.EOF", err.Error())
 					//sErr := cli.Conn.Close
 					//if sErr == nil {
 					//	println("Socket close for ", cli.clientID)
@@ -142,7 +102,7 @@ func readClientsData() {
 					var newTask Task
 					newTask.TaskType = DELCLIENT
 					newTask.ClientID = cli.clientID
-					ConnectionChan <- newTask
+					TaskChan <- newTask
 					delete(Clients, cli.clientID)
 					//} else {
 					//	println("Socket close error ", sErr)
