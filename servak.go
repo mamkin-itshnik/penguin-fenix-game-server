@@ -62,7 +62,7 @@ func main() {
 	arg := os.Args[1] //192.168.0.105:8080
 
 	//go connectManager.StartServer(arg)
-	StartServer_core(arg)
+	core_StartServer(arg)
 
 	//import costul
 

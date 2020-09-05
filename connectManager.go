@@ -19,7 +19,7 @@ func init() {
 	ConnectionChan = make(chan Task)
 }
 
-func addClient(conn net.Conn, Id string) bool {
+func CN_addClient(conn net.Conn, Id string) bool {
 	if _, ok := Clients[Id]; !ok {
 
 		//make client
@@ -42,13 +42,13 @@ func addClient(conn net.Conn, Id string) bool {
 	}
 }
 
-func StartServer_CN(adress string) {
-	go runAcceptor(adress)
-	go readClientsData()
-	go writeClientData()
+func CN_StartServer(adress string) {
+	go CN_runAcceptor(adress)
+	go CN_readClientsData()
+	go CN_writeClientData()
 }
 
-func runAcceptor(adress string) error {
+func CN_runAcceptor(adress string) error {
 	var i int
 	i = 0
 	log.Printf("try starting server on %v\n", adress)
@@ -64,7 +64,7 @@ func runAcceptor(adress string) error {
 		if err != nil {
 			log.Printf("error accepting connection %v", err)
 		} else {
-			addClient(conn, "ID_"+strconv.Itoa(i))
+			CN_addClient(conn, "ID_"+strconv.Itoa(i))
 			log.Println("accepted connection from ", conn.RemoteAddr())
 			i++
 		}
@@ -72,11 +72,11 @@ func runAcceptor(adress string) error {
 	return err
 }
 
-func writeClientData() {
+func CN_writeClientData() {
 
 }
 
-func readClientsData() {
+func CN_readClientsData() {
 	for {
 		for id, cli := range Clients {
 			fmt.Println("___", cli.clientID)

@@ -4,21 +4,21 @@ import (
 	"fmt"
 )
 
-func StartServer_core(adress string) {
-	go taskAcceptor_core(ConnectionChan)
-	StartServer_CN(adress)
+func core_StartServer(adress string) {
+	go core_taskAcceptor(ConnectionChan)
+	CN_StartServer(adress)
 }
 
 func init() {
 	fmt.Println("Create core ")
 }
 
-func taskAcceptor_core(c chan Task) {
+func core_taskAcceptor(c chan Task) {
 	for {
 		newTask := <-c
 		switch newTask.TaskType {
 		case ADDCLIENT:
-			AddPlayer(newTask.ClientID)
+			core_AddPlayer(newTask.ClientID)
 		case DELCLIENT:
 			fmt.Println("_________________ hui")
 		case CLIENTMOVE:
@@ -30,10 +30,10 @@ func taskAcceptor_core(c chan Task) {
 	}
 }
 
-func AddPlayer(playerID string) {
+func core_AddPlayer(playerID string) {
 	fmt.Println("func AddPlayer(playerID string)")
 }
-func AddTask(playerID string, newTask Task) {
+func core_AddTask(playerID string, newTask Task) {
 	fmt.Println("Hello TASK!")
 }
 
