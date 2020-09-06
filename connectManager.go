@@ -23,10 +23,11 @@ func CN_addClient(conn net.Conn, Id string) bool {
 
 		println("CN_addClient %s", Id)
 		//make client
-		var newClient Client
+		var newClient *Client
+		newClient = new(Client)
 		newClient.clientID = Id
 		newClient.Conn = conn
-		Clients[Id] = &newClient
+		Clients[Id] = newClient
 
 		//make task
 		var newTask Task
@@ -34,7 +35,7 @@ func CN_addClient(conn net.Conn, Id string) bool {
 		newTask.ClientID = Id
 		TaskChan <- newTask
 
-		newmessage := "Init;" + Id + ";"
+		newmessage := "0;" + Id + ";"
 		newClient.Conn.Write([]byte(newmessage))
 
 		println("new client add!, now client count = ", len(Clients))
@@ -48,7 +49,7 @@ func CN_addClient(conn net.Conn, Id string) bool {
 func CN_StartServer(adress string) {
 	go CN_runAcceptor(adress)
 	go CN_readClientsData()
-	go CN_writeClientData()
+	//go CN_writeClientData()
 }
 
 func CN_runAcceptor(adress string) error {
@@ -75,8 +76,12 @@ func CN_runAcceptor(adress string) error {
 	return err
 }
 
-func CN_writeClientData() {
+func CN_writeClientData(currentPlayer Player) {
 
+	log.Println("____________1", len(currentPlayer.TaskMap))
+	for i, _ := range currentPlayer.TaskMap {
+		Clients[currentPlayer.Id].Conn.Write([]byte(TP_makeStringTask(&currentPlayer, i)))
+	}
 }
 
 func CN_readClientsData() {
@@ -88,7 +93,7 @@ func CN_readClientsData() {
 
 				//println("read client data: ", message)
 
-				var newTask Task = TP_makeTask(message, id)
+				var newTask Task = TP_makeClientInputsTask(message, id)
 				TaskChan <- newTask
 			} else {
 				if err == io.EOF {

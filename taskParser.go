@@ -9,7 +9,7 @@ func newWrongTask(newTask Task) Task {
 	newTask.TaskType = WRONGTASK
 	return newTask
 }
-func TP_makeTask(str string, playerID string) Task {
+func TP_makeClientInputsTask(str string, playerID string) Task {
 	var newTask Task
 	newTask.ClientID = playerID
 
@@ -71,6 +71,46 @@ func TP_makeTask(str string, playerID string) Task {
 	return newWrongTask(newTask)
 	//AddPlayer(playerID)
 }
+
+func TP_makeStringTask(currentPlayer *Player, taskNumber int) string {
+	var message string
+
+	switch {
+	case taskNumber == ADDCLIENT:
+		//--------------------------------------------player moves
+		//message += strconv.FormatInt(ADDCLIENT, 10) + ";"
+		//message += "add;"
+		//message += currentPlayer.Id + ";"
+		//message += "\n"
+		//_, ok := currentPlayer.TaskMap[ADDCLIENT]
+		//if ok {
+		//	delete(currentPlayer.TaskMap, ADDCLIENT)
+		//}
+		//------------------------------------------------------END
+	case taskNumber == CLIENTMOVE:
+		//--------------------------------------------player shoot
+		message += strconv.FormatInt(CLIENTMOVE, 10) + ";"
+		message += currentPlayer.Id + ";"
+		message += strconv.FormatFloat(currentPlayer.Pos.X, 'f', 1, 64) + ";"
+		message += strconv.FormatFloat(currentPlayer.Pos.Y, 'f', 1, 64) + ";"
+		message += strconv.FormatFloat(currentPlayer.Pos.Angle, 'f', 1, 64) + ";"
+		message += strconv.FormatInt(currentPlayer.HealfPoint, 10) + ";"
+		message += "\n"
+		//------------------------------------------------------END
+	default:
+		//WRONG
+	}
+
+	return message
+}
+
+//
+/*func TP_makeNewClientsTask(playerID string) Task {
+	var newTask Task
+	newTask.TaskType = ADDCLIENT
+	newTask.ClientID = playerID
+	return newTask
+}*/
 
 /*//var dX, dY, nAngl float64
 	if strings.Contains(strArr[0], "XD") {
