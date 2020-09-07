@@ -76,11 +76,11 @@ func CN_runAcceptor(adress string) error {
 	return err
 }
 
-func CN_writeClientData(currentPlayer Player) {
+func CN_writeClientData(currentPlayer *Player) {
 
-	log.Println("____________1", len(currentPlayer.TaskMap))
+	//log.Println("____________1", len(currentPlayer.TaskMap))
 	for i, _ := range currentPlayer.TaskMap {
-		Clients[currentPlayer.Id].Conn.Write([]byte(TP_makeStringTask(&currentPlayer, i)))
+		Clients[currentPlayer.Id].Conn.Write([]byte(TP_makeStringTask(currentPlayer, i)))
 	}
 }
 

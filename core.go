@@ -13,7 +13,7 @@ func core_StartServer(adress string) {
 
 func init() {
 	fmt.Println("Create core ")
-	players = make(map[string]Player)
+	players = make(map[string]*Player)
 }
 
 func core_TicTack() {
@@ -21,7 +21,8 @@ func core_TicTack() {
 		time.Sleep(time.Millisecond * 100)
 		//fmt.Println("watafuck", len(players))
 		for _, player := range players {
-			engine_SolveTask(&player)
+			//fmt.Println("player pos ", player.Pos)
+			engine_SolveTask(player)
 			CN_writeClientData(player)
 		}
 	}
@@ -60,7 +61,7 @@ func core_DelPlayer(newTask Task) {
 func core_AddPlayer(ClientID string) {
 	_, ok := players[ClientID]
 	if !ok {
-		var newPlayer Player
+		var newPlayer *Player = new(Player)
 		newPlayer.TaskMap = make(map[int]Task)
 		newPlayer.Id = ClientID
 		players[ClientID] = newPlayer
@@ -72,4 +73,4 @@ func core_AddPlayer(ClientID string) {
 	fmt.Println("Hello TASK!")
 }*/
 
-var players map[string]Player
+var players map[string]*Player
