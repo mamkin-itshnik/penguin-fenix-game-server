@@ -13,14 +13,17 @@ func core_StartServer(adress string) {
 
 func init() {
 	fmt.Println("Create core ")
-	players = make(map[string]Player)
+	players = make(map[string]*Player)
 }
 
 func core_TicTack() {
 	for {
 		time.Sleep(time.Millisecond * 100)
+		//fmt.Println("watafuck", len(players))
 		for _, player := range players {
-			engine_SolveTask(&player)
+			//fmt.Println("player pos ", player.Pos)
+			engine_SolveTask(player)
+			CN_writeClientData(player)
 		}
 	}
 }
@@ -33,7 +36,7 @@ func core_taskAcceptor(c chan Task) {
 			core_AddPlayer(newTask.ClientID)
 
 		case DELCLIENT:
-			core_DelPlayer(newTask.ClientID)
+			core_DelPlayer(newTask)
 
 		case CLIENTMOVE, CLIENTSHOOT:
 			core_setTask(newTask)
@@ -48,19 +51,20 @@ func core_setTask(newTask Task) {
 		player.TaskMap[newTask.TaskType] = newTask
 	}
 }
-func core_DelPlayer(playerID string) {
-	_, ok := players[playerID]
+func core_DelPlayer(newTask Task) {
+	_, ok := players[newTask.ClientID]
 	if ok {
-		delete(players, playerID)
+		delete(players, newTask.ClientID)
 		fmt.Println("func core_DelPlayer(playerID string)")
 	}
 }
-func core_AddPlayer(playerID string) {
-	_, ok := players[playerID]
+func core_AddPlayer(ClientID string) {
+	_, ok := players[ClientID]
 	if !ok {
-		var newPlayer Player
+		var newPlayer *Player = new(Player)
 		newPlayer.TaskMap = make(map[int]Task)
-		players[playerID] = newPlayer
+		newPlayer.Id = ClientID
+		players[ClientID] = newPlayer
 		fmt.Println("func AddPlayer(playerID string)")
 	}
 }
@@ -69,4 +73,4 @@ func core_AddPlayer(playerID string) {
 	fmt.Println("Hello TASK!")
 }*/
 
-var players map[string]Player
+var players map[string]*Player
