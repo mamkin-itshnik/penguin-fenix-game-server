@@ -17,13 +17,21 @@ func init() {
 }
 
 func core_TicTack() {
+	var newmessage string
 	for {
 		time.Sleep(time.Millisecond * 100)
 		//fmt.Println("watafuck", len(players))
+		newmessage = ""
+
+		//make tasks
 		for _, player := range players {
 			//fmt.Println("player pos ", player.Pos)
 			engine_SolveTask(player)
-			CN_writeClientData(player)
+			CN_addPlayerStringTask(player, &newmessage)
+		}
+		// send tasks
+		for _, player := range players {
+			CN_writeClientData(player, &newmessage)
 		}
 	}
 }
@@ -38,7 +46,7 @@ func core_taskAcceptor(c chan Task) {
 		case DELCLIENT:
 			core_DelPlayer(newTask)
 
-		case CLIENTMOVE, CLIENTSHOOT:
+		case CLIENTMOVE:
 			core_setTask(newTask)
 		}
 		//AddPlayer(playerID)
@@ -64,6 +72,7 @@ func core_AddPlayer(ClientID string) {
 		var newPlayer *Player = new(Player)
 		newPlayer.TaskMap = make(map[int]Task)
 		newPlayer.Id = ClientID
+		newPlayer.HealfPoint = startHealfPoint
 		players[ClientID] = newPlayer
 		fmt.Println("func AddPlayer(playerID string)")
 	}

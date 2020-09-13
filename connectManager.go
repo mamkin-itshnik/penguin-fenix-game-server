@@ -76,11 +76,15 @@ func CN_runAcceptor(adress string) error {
 	return err
 }
 
-func CN_writeClientData(currentPlayer *Player) {
+func CN_writeClientData(currentPlayer *Player, globalTicString *string) {
 
+	Clients[currentPlayer.Id].Conn.Write([]byte(*globalTicString))
+}
+func CN_addPlayerStringTask(currentPlayer *Player, globalTicString *string) {
 	//log.Println("____________1", len(currentPlayer.TaskMap))
 	for i, _ := range currentPlayer.TaskMap {
-		Clients[currentPlayer.Id].Conn.Write([]byte(TP_makeStringTask(currentPlayer, i)))
+		*globalTicString += "\n"
+		*globalTicString += TP_makeStringTask(currentPlayer, i)
 	}
 }
 
@@ -113,7 +117,13 @@ func CN_readClientsData() {
 					//	println("Socket close error ", sErr)
 					//}
 				} else {
-					println("NewReader error", err)
+					println("NewReader error____________ hz___", err, err.Error)
+					//make task
+					var newTask Task
+					newTask.TaskType = DELCLIENT
+					newTask.ClientID = cli.clientID
+					TaskChan <- newTask
+					delete(Clients, cli.clientID)
 				}
 			}
 		}

@@ -6,11 +6,10 @@ type TaskID int
 
 // Tasks constats
 const (
-	ADDCLIENT   = 0
-	DELCLIENT   = 1
-	CLIENTMOVE  = 2
-	CLIENTSHOOT = 3
-	WRONGTASK   = 4
+	ADDCLIENT  = 0
+	DELCLIENT  = 1
+	CLIENTMOVE = 2
+	WRONGTASK  = 3
 )
 const (
 	TASKCOUNT = 5
@@ -35,7 +34,8 @@ type Player struct {
 }
 
 type Position struct {
-	X, Y, Angle float64
+	X, Y  float64
+	Angle int
 }
 
 type ClientState struct {
