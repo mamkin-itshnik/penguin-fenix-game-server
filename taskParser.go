@@ -93,6 +93,10 @@ func TP_makeStringTask(currentPlayer *Player, taskNumber int) string {
 		message += strconv.FormatBool(currentPlayer.isAttack) + ";"
 		message += "\n"
 		//------------------------------------------------------END
+	case taskNumber == DELCLIENT:
+		//--------------------------------------------player delete
+		return message
+		//------------------------------------------------------END
 	default:
 		//WRONG
 	}
