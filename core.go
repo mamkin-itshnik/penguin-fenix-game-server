@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -30,7 +31,9 @@ func core_TicTack() {
 			CN_addPlayerStringTask(player, &newmessage)
 		}
 		// send tasks
+		//fmt.Println("SEND TASK =", newmessage)
 		for _, player := range players {
+
 			CN_writeClientData(player, &newmessage)
 		}
 	}
@@ -64,6 +67,17 @@ func core_DelPlayer(newTask Task) {
 	if ok {
 		delete(players, newTask.ClientID)
 		fmt.Println("func core_DelPlayer(playerID string)")
+		fmt.Println("NOW PLAYER COUNT = ", len(players))
+		fmt.Println("NOW CLIENTS COUNT = ", len(Clients))
+
+		var newMsg string
+		newMsg += strconv.FormatInt(DELCLIENT, 10) + ";"
+		newMsg += newTask.ClientID + ";"
+		newMsg += "\n"
+
+		for _, player := range players {
+			CN_writeClientData(player, &newMsg)
+		}
 	}
 }
 func core_AddPlayer(ClientID string) {

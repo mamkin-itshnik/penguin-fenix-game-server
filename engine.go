@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 )
@@ -19,6 +18,10 @@ func engine_SolveTask(currentPlayer *Player) {
 		case task.TaskType == CLIENTMOVE:
 			//--------------------------------------------player shoot
 			engine_makePlayerPos(currentPlayer)
+			//------------------------------------------------------END
+		case task.TaskType == DELCLIENT:
+			//--------------------------------------------player shoot
+			return
 			//------------------------------------------------------END
 		default:
 			//WRONG
@@ -76,8 +79,8 @@ func (startPoint Position) Distance(target Position) float64 {
 	foreward_distance := math.Sqrt(math.Pow((endPointX-target.X), 2) + math.Pow((endPointY-target.Y), 2))
 	backward_distance := math.Sqrt(math.Pow((endPointX_back-target.X), 2) + math.Pow((endPointY_back-target.Y), 2))
 
-	fmt.Printf("___________________ \n")
-	fmt.Printf("ANGLE = %d \n", startPoint.Angle)
+	//fmt.Printf("___________________ \n")
+	//fmt.Printf("ANGLE = %d \n", startPoint.Angle)
 	if foreward_distance > backward_distance {
 		distance = math.Sqrt(math.Pow((startPoint.X-target.X), 2) + math.Pow((startPoint.Y-target.Y), 2))
 	} else {
@@ -89,10 +92,10 @@ func (startPoint Position) Distance(target Position) float64 {
 		//fmt.Printf("___________________ \n")
 	}
 
-	fmt.Printf("start %d : %d \n", startPoint.X, startPoint.Y)
-	fmt.Printf("end   %d : %d \n", endPointX, endPointY)
-	fmt.Printf("distanse = %d \n", distance)
+	//fmt.Printf("start %d : %d \n", startPoint.X, startPoint.Y)
+	//fmt.Printf("end   %d : %d \n", endPointX, endPointY)
+	//fmt.Printf("distanse = %d \n", distance)
 	distance = (math.Abs(distance) - objectRadius)
-	fmt.Printf("distanse = %d \n", distance)
+	//fmt.Printf("distanse = %d \n", distance)
 	return distance
 }
