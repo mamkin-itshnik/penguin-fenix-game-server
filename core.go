@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"time"
 )
@@ -51,6 +52,9 @@ func core_taskAcceptor(c chan Task) {
 
 		case CLIENTMOVE:
 			core_setTask(newTask)
+
+		case REBURNCLIENT:
+			core_REBURNPlayer(newTask)
 		}
 		//AddPlayer(playerID)
 	}
@@ -72,6 +76,23 @@ func core_DelPlayer(newTask Task) {
 
 		var newMsg string
 		newMsg += strconv.FormatInt(DELCLIENT, 10) + ";"
+		newMsg += newTask.ClientID + ";"
+		newMsg += "\n"
+
+		for _, player := range players {
+			CN_writeClientData(player, &newMsg)
+		}
+	}
+}
+func core_REBURNPlayer(newTask Task) {
+	player, ok := players[newTask.ClientID]
+	if ok {
+
+		player.HealfPoint = startHealfPoint
+		player.Pos.X = minPos + rand.Float64()*(maxPos-minPos)
+		player.Pos.Y = minPos + rand.Float64()*(maxPos-minPos)
+		var newMsg string
+		newMsg += strconv.FormatInt(REBURNCLIENT, 10) + ";"
 		newMsg += newTask.ClientID + ";"
 		newMsg += "\n"
 

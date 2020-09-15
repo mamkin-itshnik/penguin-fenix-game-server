@@ -9,7 +9,8 @@ var moveSpeed = 0.3
 var shootDistance = 40.0
 var startHealfPoint int64 = 50
 var objectRadius float64 = 1.1 //0.4
-var shootRate = 1
+var minPos float64 = -20.5
+var maxPos float64 = 20.5
 
 func engine_SolveTask(currentPlayer *Player) {
 
@@ -56,6 +57,14 @@ func engine_makePlayerPos(currentPlayer *Player) {
 				if dist < 0 {
 					//println("HEALF --")
 					otherPlayer.HealfPoint--
+					if otherPlayer.HealfPoint < 0 {
+						var newTask Task
+						newTask.ClientID = otherPlayer.Id
+						newTask.TaskType = REBURNCLIENT
+						TaskChan <- newTask
+						//newTask.TaskArgs = make([]string, 1)
+					}
+
 				} else {
 					// vse ok
 				}
