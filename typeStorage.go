@@ -6,10 +6,11 @@ type TaskID int
 
 // Tasks constats
 const (
-	ADDCLIENT  = 0
-	DELCLIENT  = 1
-	CLIENTMOVE = 2
-	WRONGTASK  = 3
+	ADDCLIENT    = 0
+	DELCLIENT    = 1
+	CLIENTMOVE   = 2
+	REBURNCLIENT = 3
+	WRONGTASK    = 4
 )
 const (
 	TASKCOUNT = 5
