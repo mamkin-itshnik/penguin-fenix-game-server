@@ -91,6 +91,7 @@ func TP_makeStringTask(currentPlayer *Player, taskNumber int) string {
 		message += strconv.FormatInt(int64(currentPlayer.Pos.Angle), 10) + ";"
 		message += strconv.FormatInt(currentPlayer.HealfPoint, 10) + ";"
 		message += strconv.FormatBool(currentPlayer.isAttack) + ";"
+		message += strconv.FormatInt(int64(currentPlayer.Scores), 10) + ";"
 		message += "\n"
 		//------------------------------------------------------END
 	case taskNumber == DELCLIENT:
