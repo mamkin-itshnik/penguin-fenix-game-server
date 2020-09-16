@@ -11,6 +11,7 @@ var startHealfPoint int64 = 50
 var objectRadius float64 = 1.1 //0.4
 var minPos float64 = -20.5
 var maxPos float64 = 20.5
+var hpHilLerp float64 = 0.7
 
 func engine_SolveTask(currentPlayer *Player) {
 
@@ -61,6 +62,9 @@ func engine_makePlayerPos(currentPlayer *Player) {
 						var newTask Task
 						newTask.ClientID = otherPlayer.Id
 						newTask.TaskType = REBURNCLIENT
+						currentPlayer.Scores += ((otherPlayer.Scores / 2) + 1)
+						currentPlayer.HealfPoint += int64(hpHilLerp * float64(startHealfPoint-currentPlayer.HealfPoint))
+						otherPlayer.Scores = 0
 						TaskChan <- newTask
 						//newTask.TaskArgs = make([]string, 1)
 					}
