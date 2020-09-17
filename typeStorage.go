@@ -2,47 +2,55 @@ package main
 
 import "net"
 
-type TaskID int
-
-// Tasks constats
+// Tasks types
 const (
-	ADDCLIENT    = 0
-	DELCLIENT    = 1
-	CLIENTMOVE   = 2
-	REBURNCLIENT = 3
-	WRONGTASK    = 4
-)
-const (
-	TASKCOUNT = 5
+	DELCLIENT     = 1
+	CLIENTMOVE    = 2
+	RESPAWNCLIENT = 3
 )
 
-//for ConnectManager.go
-type Client struct {
-	net.Conn
-	clientID string
-}
+// message type
+const (
+	YOURID  = 0
+	STATE   = 1
+	HISCORE = 2
+)
 
-// ConnectManager.go + core.go  + engine.go
+// engine shit
+const (
+	MOVESPEED                = 0.3
+	SHOOTDISTANCE            = 40.0
+	STARTHEALTHPOINT int64   = 50
+	OBJECTRADIUS     float64 = 1.1 //0.4
+	MINPOS           float64 = -20.5
+	MAXPOS           float64 = 20.5
+	HPHEALLERP       float64 = 0.5
+)
+
 type Task struct {
-	ClientID string
-	TaskType int
-	TaskArgs []string
+	clientId string
+	taskType int
+	taskArgs []string
 }
 
 type Player struct {
-	ClientState
-	TaskMap map[int]Task
-	Scores  int
+
+	// by engine
+	id          string
+	skin        int64
+	nickname    string
+	pos         Position
+	healthPoint int64
+	scorePoint  int64
+
+	net.Conn
+
+	// from network
+	wannaPos Position
 }
 
 type Position struct {
-	X, Y  float64
-	Angle int
-}
-
-type ClientState struct {
-	Pos        Position
-	Id         string
-	isAttack   bool
-	HealfPoint int64
+	x, y     float64
+	angle    int64
+	isAttack bool
 }
