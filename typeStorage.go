@@ -11,9 +11,10 @@ const (
 
 // message type
 const (
-	YOURID  = 0
-	STATE   = 1
-	HISCORE = 2
+	YOURID     = 0
+	STATE      = 1
+	HISCORE    = 2
+	KILLPLAYER = 3
 )
 
 // engine shit
