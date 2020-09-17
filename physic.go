@@ -39,7 +39,7 @@ func makePlayerPos(currentPlayer *Player) {
 
 func getPlayerPosMsg(currentPlayer *Player) string {
 	var message string
-	message += strconv.FormatInt(CLIENTMOVE, 10) + ";"
+	message += strconv.FormatInt(STATE, 10) + ";"
 	message += currentPlayer.id + ";"
 	message += strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64) + ";"
 	message += strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64) + ";"
