@@ -28,7 +28,7 @@ func makePlayerPos(currentPlayer *Player) {
 
 						var newTask Task
 						newTask.clientId = otherPlayer.id
-						newTask.taskType = RESPAWNCLIENT
+						newTask.taskType = TASK_RESPAWNCLIENT
 						taskChan <- newTask
 					}
 				}
@@ -39,7 +39,7 @@ func makePlayerPos(currentPlayer *Player) {
 
 func getPlayerPosMsg(currentPlayer *Player) string {
 	var message string
-	message += strconv.FormatInt(STATE, 10) + ";"
+	message += strconv.FormatInt(MSG_STATE, 10) + ";"
 	message += currentPlayer.id + ";"
 	message += strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64) + ";"
 	message += strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64) + ";"

@@ -67,7 +67,7 @@ func createPlayer(conn net.Conn, id string) {
 		newPlayer.id = id
 		newPlayer.healthPoint = STARTHEALTHPOINT
 		newPlayer.Conn = conn
-		newMessage := strconv.Itoa(YOURID) + ";"
+		newMessage := strconv.Itoa(MSG_YOURID) + ";"
 		newMessage += id + ";\n"
 		players[id] = newPlayer
 		newPlayer.Conn.Write([]byte(newMessage))
@@ -94,7 +94,7 @@ func readPlayersInput() {
 				// TODO: check this
 				//make task
 				var newTask Task
-				newTask.taskType = DELCLIENT
+				newTask.taskType = TASK_DELCLIENT
 				newTask.clientId = pl.id
 				taskChan <- newTask
 			}
@@ -141,7 +141,7 @@ func taskWorker() {
 	for {
 		newTask := <-taskChan
 		switch newTask.taskType {
-		case DELCLIENT:
+		case TASK_DELCLIENT:
 			{
 				_, ok := players[newTask.clientId]
 				if !ok {
@@ -154,13 +154,13 @@ func taskWorker() {
 				log.Println("NOW PLAYER COUNT = ", len(players))
 
 				var newMsg string
-				newMsg += strconv.FormatInt(DELCLIENT, 10) + ";"
+				newMsg += strconv.FormatInt(MSG_KILLPLAYER, 10) + ";"
 				newMsg += newTask.clientId + ";\n"
 
 				sendToPlayers(&newMsg)
 			}
 
-		case RESPAWNCLIENT:
+		case TASK_RESPAWNCLIENT:
 			{
 				player, ok := players[newTask.clientId]
 				if !ok {
@@ -176,7 +176,7 @@ func taskWorker() {
 
 				// make message
 				var newMsg string
-				newMsg += strconv.FormatInt(RESPAWNCLIENT, 10) + ";"
+				newMsg += strconv.FormatInt(MSG_RESPAWNPLAYER, 10) + ";"
 				newMsg += newTask.clientId + ";"
 				newMsg += "\n"
 
@@ -195,7 +195,7 @@ func sendToPlayers(msg *string) {
 func tickTockWorker() {
 	var newmessage string
 	for {
-		time.Sleep(time.Millisecond * 100)
+		time.Sleep(time.Millisecond * TICKPERIOD)
 		newmessage = ""
 		//make some physics works
 		for _, player := range players {
