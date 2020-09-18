@@ -1,20 +1,24 @@
 package main
 
-import "net"
+import (
+	"net"
+	"time"
+)
 
 // Tasks types
 const (
-	DELCLIENT     = 1
-	CLIENTMOVE    = 2
-	RESPAWNCLIENT = 3
+	TASK_DELCLIENT     = 1
+	TASK_CLIENTMOVE    = 2
+	TASK_RESPAWNCLIENT = 3
 )
 
-// message type
+// message type from server
 const (
-	YOURID     = 0
-	STATE      = 1
-	HISCORE    = 2
-	KILLPLAYER = 3
+	MSG_YOURID        = 0
+	MSG_STATE         = 1
+	MSG_HISCORE       = 2
+	MSG_KILLPLAYER    = 3
+	MSG_RESPAWNPLAYER = 4
 )
 
 // engine shit
@@ -26,6 +30,11 @@ const (
 	MINPOS           float64 = -20.5
 	MAXPOS           float64 = 20.5
 	HPHEALLERP       float64 = 0.5
+)
+
+// some constants
+const (
+	TICKPERIOD time.Duration = 1000
 )
 
 type Task struct {
