@@ -34,7 +34,7 @@ const (
 
 // some constants
 const (
-	TICKPERIOD time.Duration = 101
+	TICKPERIOD time.Duration = 1000
 )
 
 type Task struct {

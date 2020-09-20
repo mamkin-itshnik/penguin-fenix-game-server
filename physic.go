@@ -37,17 +37,16 @@ func makePlayerPos(currentPlayer *Player) {
 	}
 }
 
-func getPlayerPosMsg(currentPlayer *Player) string {
-	var message string
-	message += strconv.FormatInt(MSG_STATE, 10) + ";"
-	message += currentPlayer.id + ";"
-	message += strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64) + ";"
-	message += strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64) + ";"
-	message += strconv.FormatInt(int64(currentPlayer.pos.angle), 10) + ";"
-	message += strconv.FormatInt(currentPlayer.healthPoint, 10) + ";"
-	message += strconv.FormatBool(currentPlayer.pos.isAttack) + ";"
-	message += strconv.FormatInt(int64(currentPlayer.scorePoint), 10) + ";"
-	message += "\n"
+func getPlayerPosMsg(currentPlayer *Player) []string {
+	var message []string
+	message = append(message, strconv.FormatInt(MSG_STATE, 10))
+	message = append(message, currentPlayer.id)
+	message = append(message, strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64))
+	message = append(message, strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64))
+	message = append(message, strconv.FormatInt(int64(currentPlayer.pos.angle), 10))
+	message = append(message, strconv.FormatInt(currentPlayer.healthPoint, 10))
+	message = append(message, strconv.FormatBool(currentPlayer.pos.isAttack))
+	message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
 	return message
 }
 
