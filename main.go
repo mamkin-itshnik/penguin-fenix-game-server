@@ -58,47 +58,105 @@ func startServer(arg string) {
 	return
 }
 
-func createPlayer(conn net.Conn, id string) {
-	if _, ok := players[id]; !ok {
-
-		println("createPlayer %s", id)
-
-		var newPlayer *Player = new(Player)
-		newPlayer.id = id
-		newPlayer.healthPoint = STARTHEALTHPOINT
-		newPlayer.Conn = conn
-		newMessage := strconv.Itoa(MSG_YOURID) + ";"
-		newMessage += id + ";\n"
-		players[id] = newPlayer
-		newPlayer.Conn.Write([]byte(newMessage))
-	} else {
-		println("client %s exist.\nWFT?????????", id)
-	}
-}
-
 func readPlayersInput() {
 	for {
 		for _, pl := range players {
 			message, err := bufio.NewReader(pl.Conn).ReadString('\n')
 			if err == nil {
+				log.Println("readPlayersInput player loop non err")
 				parsePlayersInput(message, pl)
 			} else {
 				if err == io.EOF {
-					println("NewReader io.EOF", err)
-					println("NewReader io.EOF", err.Error())
+					log.Println("bufio error io.EOF", err)
 					pl.Conn.Close()
 				} else {
-					println("NewReader error____________ hz___", err, err.Error)
+					log.Println("bufio error ", err)
 				}
 
 				// TODO: check this
 				//make task
+				log.Println("readPlayersInput player loop err +++")
 				var newTask Task
 				newTask.taskType = TASK_DELCLIENT
 				newTask.clientId = pl.id
 				taskChan <- newTask
 			}
 		}
+	}
+}
+
+func taskWorker() {
+	for {
+		log.Println("taskWorker start.")
+		newTask := <-taskChan
+		switch newTask.taskType {
+		case TASK_DELCLIENT:
+			{
+				_, ok := players[newTask.clientId]
+				if !ok {
+					//log.Println("WTF? Deleting player that doesn't exist in map",
+					//	newTask.clientId)
+					break
+				}
+				delete(players, newTask.clientId)
+				log.Println("func core_DelPlayer(playerID string)")
+				log.Println("NOW PLAYER COUNT = ", len(players))
+
+				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_KILLPLAYER, 10), newTask.clientId))
+			}
+
+		case TASK_RESPAWNCLIENT:
+			{
+				player, ok := players[newTask.clientId]
+				if !ok {
+					log.Println("WTF? Respawn player that doesn't exist in map",
+						newTask.clientId)
+				}
+
+				// make random state
+				player.healthPoint = STARTHEALTHPOINT
+				player.pos.x = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
+				player.pos.y = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
+				player.scorePoint = 0
+
+				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), newTask.clientId))
+			}
+		}
+		log.Println("taskWorker end.")
+	}
+}
+
+func tickTockWorker() {
+	var newmessage []string
+	for {
+		log.Println("tickTockWorker start.")
+		time.Sleep(time.Millisecond * TICKPERIOD)
+		newmessage = newmessage[:0]
+
+		log.Println("tic player count:", len(players))
+		//make some physics works
+		for _, player := range players {
+			makePlayerPos(player)
+			playerMsg := getPlayerPosMsg(player)
+			newmessage = append(newmessage, prepareMsg(playerMsg...))
+		}
+		if len(newmessage)!=0 {
+			sendToPlayers(newmessage...)
+		}
+		log.Println("tickTockWorker end.")
+	}
+}
+
+func prepareMsg(parts ...string) string {
+	return strings.Join(parts, ";") + ";\n"
+}
+
+func sendToPlayers(parts ...string) {
+	msg := strings.Join(parts, "")
+	log.Println("send to all:", msg)
+	for _, pl := range players {
+		log.Println("really send")
+		pl.Conn.Write([]byte(msg))
 	}
 }
 
@@ -137,71 +195,20 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 	}
 }
 
-func taskWorker() {
-	for {
-		newTask := <-taskChan
-		switch newTask.taskType {
-		case TASK_DELCLIENT:
-			{
-				_, ok := players[newTask.clientId]
-				if !ok {
-					//log.Println("WTF? Deleting player that doesn't exist in map",
-					//	newTask.clientId)
-					break
-				}
-				delete(players, newTask.clientId)
-				log.Println("func core_DelPlayer(playerID string)")
-				log.Println("NOW PLAYER COUNT = ", len(players))
+func createPlayer(conn net.Conn, id string) {
+	if _, ok := players[id]; !ok {
 
-				var newMsg string
-				newMsg += strconv.FormatInt(MSG_KILLPLAYER, 10) + ";"
-				newMsg += newTask.clientId + ";\n"
+		log.Println("createPlayer %s", id)
 
-				sendToPlayers(&newMsg)
-			}
-
-		case TASK_RESPAWNCLIENT:
-			{
-				player, ok := players[newTask.clientId]
-				if !ok {
-					log.Println("WTF? Respawn player that doesn't exist in map",
-						newTask.clientId)
-				}
-
-				// make random state
-				player.healthPoint = STARTHEALTHPOINT
-				player.pos.x = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
-				player.pos.y = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
-				player.scorePoint = 0
-
-				// make message
-				var newMsg string
-				newMsg += strconv.FormatInt(MSG_RESPAWNPLAYER, 10) + ";"
-				newMsg += newTask.clientId + ";"
-				newMsg += "\n"
-
-				sendToPlayers(&newMsg)
-			}
-		}
-	}
-}
-
-func sendToPlayers(msg *string) {
-	for _, pl := range players {
-		pl.Conn.Write([]byte(*msg))
-	}
-}
-
-func tickTockWorker() {
-	var newmessage string
-	for {
-		time.Sleep(time.Millisecond * TICKPERIOD)
-		newmessage = ""
-		//make some physics works
-		for _, player := range players {
-			makePlayerPos(player)
-			newmessage += getPlayerPosMsg(player)
-		}
-		sendToPlayers(&newmessage)
+		var newPlayer *Player = new(Player)
+		newPlayer.id = id
+		newPlayer.healthPoint = STARTHEALTHPOINT
+		newPlayer.Conn = conn
+		newMessage := strconv.Itoa(MSG_YOURID) + ";"
+		newMessage += id + ";\n"
+		players[id] = newPlayer
+		newPlayer.Conn.Write([]byte(newMessage))
+	} else {
+		log.Println("client %s exist.\nWFT?????????", id)
 	}
 }
