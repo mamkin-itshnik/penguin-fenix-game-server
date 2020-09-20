@@ -93,13 +93,6 @@ func taskWorker() {
 		switch newTask.taskType {
 		case TASK_DELCLIENT:
 			{
-				_, ok := players[newTask.clientId]
-				if !ok {
-					//log.Println("WTF? Deleting player that doesn't exist in map",
-					//	newTask.clientId)
-					break
-				}
-
 				log.Println("func core_DelPlayer(playerID string)")
 				log.Println("NOW PLAYER COUNT = ", len(players))
 
