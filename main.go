@@ -63,7 +63,7 @@ func readPlayersInput() {
 		for _, pl := range players {
 			message, err := bufio.NewReader(pl.Conn).ReadString('\n')
 			if err == nil {
-				log.Println("readPlayersInput player loop non err")
+				//log.Println("readPlayersInput player loop non err")
 				parsePlayersInput(message, pl)
 			} else {
 				if err == io.EOF {
