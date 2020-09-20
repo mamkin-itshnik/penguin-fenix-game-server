@@ -10,6 +10,7 @@ const (
 	TASK_DELCLIENT     = 1
 	TASK_CLIENTMOVE    = 2
 	TASK_RESPAWNCLIENT = 3
+	TASK_UPDATESCORE   = 4
 )
 
 // message type from server

@@ -122,6 +122,20 @@ func taskWorker() {
 
 				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), newTask.clientId))
 			}
+		case TASK_UPDATESCORE:
+			{
+				var newmessage []string
+				newmessage = newmessage[:0]
+				log.Println("update player task:", len(players))
+				//make score array
+				for _, player := range players {
+					playerMsg := getPlayerScore(player)
+					newmessage = append(newmessage, prepareMsg(playerMsg...))
+				}
+				if len(newmessage) != 0 {
+					sendToPlayers(newmessage...)
+				}
+			}
 		}
 		log.Println("taskWorker end.")
 	}
@@ -141,7 +155,7 @@ func tickTockWorker() {
 			playerMsg := getPlayerPosMsg(player)
 			newmessage = append(newmessage, prepareMsg(playerMsg...))
 		}
-		if len(newmessage)!=0 {
+		if len(newmessage) != 0 {
 			sendToPlayers(newmessage...)
 		}
 		log.Println("tickTockWorker end.")
