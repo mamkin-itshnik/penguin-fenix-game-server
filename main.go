@@ -79,6 +79,7 @@ func readPlayersInput() {
 				var newTask Task
 				newTask.taskType = TASK_DELCLIENT
 				newTask.clientId = pl.id
+				delete(players, newTask.clientId)
 				taskChan <- newTask
 			}
 		}
@@ -98,7 +99,7 @@ func taskWorker() {
 					//	newTask.clientId)
 					break
 				}
-				delete(players, newTask.clientId)
+
 				log.Println("func core_DelPlayer(playerID string)")
 				log.Println("NOW PLAYER COUNT = ", len(players))
 
