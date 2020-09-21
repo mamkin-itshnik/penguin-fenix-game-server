@@ -25,6 +25,15 @@ func main() {
 	taskChan = make(chan Task)
 
 	arg := os.Args[1] //0.0.0.0:8080
+	//---------------------------------------------------------LOG file setup
+	f, err := os.OpenFile("penguin_royale_logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
+	log.Println("This is a test log entry")
+	//----------------------------------------------------------END setup logfile
 
 	go startServer(arg)
 	go readPlayersInput()
