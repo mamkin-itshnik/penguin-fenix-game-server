@@ -27,6 +27,7 @@ const (
 	MOVESPEED                = 0.3
 	SHOOTDISTANCE            = 40.0
 	STARTHEALTHPOINT int64   = 50
+	WEAPONBASEDAMAGE int64   = 10  //1
 	OBJECTRADIUS     float64 = 1.1 //0.4
 	MINPOS           float64 = -20.5
 	MAXPOS           float64 = 20.5
@@ -35,7 +36,7 @@ const (
 
 // some constants
 const (
-	TICKPERIOD time.Duration = 100
+	TICKPERIOD time.Duration = 1000
 )
 
 type Task struct {

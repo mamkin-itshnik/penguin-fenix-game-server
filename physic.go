@@ -20,7 +20,7 @@ func makePlayerPos(currentPlayer *Player) {
 			if id_other != currentPlayer.id {
 				dist := currentPlayer.pos.distance(otherPlayer.pos)
 				if dist < 0 {
-					otherPlayer.healthPoint--
+					otherPlayer.healthPoint -= WEAPONBASEDAMAGE
 					if otherPlayer.healthPoint < 0 {
 
 						//--- Score++ HP++
