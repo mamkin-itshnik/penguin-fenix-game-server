@@ -105,7 +105,7 @@ func taskWorker() {
 				log.Println("func core_DelPlayer(playerID string)")
 				log.Println("NOW PLAYER COUNT = ", len(players))
 
-				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_KILLPLAYER, 10), newTask.clientId))
+				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_KILLPLAYER, 10), ";", newTask.clientId, ";"))
 			}
 
 		case TASK_RESPAWNCLIENT:
@@ -122,7 +122,7 @@ func taskWorker() {
 				player.pos.y = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
 				player.scorePoint = 0
 
-				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), newTask.clientId))
+				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), ";", newTask.clientId), ";")
 			}
 		case TASK_UPDATESCORE:
 			{
@@ -164,11 +164,12 @@ func tickTockWorker() {
 }
 
 func prepareMsg(parts ...string) string {
-	return (strings.Join(parts, ";") + ";/\n")
+	return (strings.Join(parts, ""))
 }
 
 func sendToPlayers(parts ...string) {
 	msg := strings.Join(parts, "")
+	msg += "\n"
 	log.Println("send to all:", msg)
 	for _, pl := range players {
 		log.Println("really send")
