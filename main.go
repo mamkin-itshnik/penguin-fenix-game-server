@@ -127,7 +127,6 @@ func taskWorker() {
 		case TASK_UPDATESCORE:
 			{
 				var newmessage []string
-				newmessage = newmessage[:0]
 				log.Println("update player task:", len(players))
 				//make score array
 				for _, player := range players {
@@ -165,7 +164,7 @@ func tickTockWorker() {
 }
 
 func prepareMsg(parts ...string) string {
-	return strings.Join(parts, ";") + ";\n"
+	return (strings.Join(parts, ";") + ";/\n")
 }
 
 func sendToPlayers(parts ...string) {
