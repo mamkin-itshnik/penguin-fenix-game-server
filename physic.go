@@ -47,24 +47,25 @@ func makePlayerPos(currentPlayer *Player) {
 
 func getPlayerPosMsg(currentPlayer *Player) []string {
 	var message []string
-	message = append(message, strconv.FormatInt(MSG_STATE, 10), ";")
-	message = append(message, currentPlayer.id, ";")
-	message = append(message, strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64), ";")
-	message = append(message, strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64), ";")
-	message = append(message, strconv.FormatInt(int64(currentPlayer.pos.angle), 10), ";")
-	message = append(message, strconv.FormatInt(currentPlayer.healthPoint, 10), ";")
-	message = append(message, strconv.FormatBool(currentPlayer.pos.isAttack), ";")
-	message = append(message, "/") //end of player state
+	message = append(message, strconv.FormatInt(MSG_STATE, 10))
+	message = append(message, currentPlayer.id)
+	message = append(message, strconv.FormatFloat(currentPlayer.pos.x, 'f', 1, 64))
+	message = append(message, strconv.FormatFloat(currentPlayer.pos.y, 'f', 1, 64))
+	message = append(message, strconv.FormatInt(int64(currentPlayer.pos.angle), 10))
+	message = append(message, strconv.FormatInt(currentPlayer.healthPoint, 10))
+	message = append(message, strconv.FormatBool(currentPlayer.pos.isAttack))
+	// message = append(message, "/") //end of player state
 	// NOTICE - no more score point in player pos
 	//message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
 	return message
 }
+
 func getPlayerScore(currentPlayer *Player) []string {
 	var message []string
-	message = append(message, strconv.FormatInt(MSG_HISCORE, 10), ";")
-	message = append(message, currentPlayer.id, ";")
-	message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10), ";")
-	message = append(message, "/") //end of player state
+	message = append(message, strconv.FormatInt(MSG_HISCORE, 10))
+	message = append(message, currentPlayer.id)
+	message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
+	// message = append(message, "/") //end of player state
 	return message
 }
 
