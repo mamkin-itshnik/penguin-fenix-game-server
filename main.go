@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"io"
 	"log"
-	"math/rand"
 	"net"
 	"os"
 	"strconv"
@@ -36,7 +35,6 @@ func main() {
 	//----------------------------------------------------------END setup logfile
 
 	go startServer(arg)
-	go readPlayersInput()
 	go taskWorker()
 	go tickTockWorker()
 
@@ -67,32 +65,13 @@ func startServer(arg string) {
 	return
 }
 
-func readPlayersInput() {
-	for {
-		for _, pl := range players {
-			message, err := bufio.NewReader(pl.Conn).ReadString('\n')
-			if err == nil {
-				//log.Println("readPlayersInput player loop non err")
-				parsePlayersInput(message, pl)
-			} else {
-				if err == io.EOF {
-					log.Println("bufio error io.EOF", err)
-					pl.Conn.Close()
-				} else {
-					log.Println("bufio error ", err)
-				}
-
-				// TODO: check this
-				//make task
-				log.Println("readPlayersInput player loop err +++")
-				var newTask Task
-				newTask.taskType = TASK_DELCLIENT
-				newTask.clientId = pl.id
-				delete(players, newTask.clientId)
-				taskChan <- newTask
-			}
-		}
-	}
+func makeDeletePlayerTask(player *Player) {
+	var newTask Task
+	newTask.taskType = TASK_DELCLIENT
+	newTask.clientId = player.id
+	player.Conn.Close()
+	delete(players, newTask.clientId)
+	taskChan <- newTask
 }
 
 func taskWorker() {
@@ -118,8 +97,7 @@ func taskWorker() {
 
 				// make random state
 				player.healthPoint = STARTHEALTHPOINT
-				player.pos.x = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
-				player.pos.y = MINPOS + rand.Float64()*(MAXPOS-MINPOS)
+				player.pos = makeRandomPos()
 				player.scorePoint = 0
 
 				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), newTask.clientId))
@@ -145,7 +123,7 @@ func taskWorker() {
 func tickTockWorker() {
 	var newmessage []string
 	for {
-		log.Println("tickTockWorker start.")
+		//log.Println("tickTockWorker start.")
 		time.Sleep(time.Millisecond * TICKPERIOD)
 		newmessage = newmessage[:0]
 
@@ -159,7 +137,7 @@ func tickTockWorker() {
 		if len(newmessage) != 0 {
 			sendToPlayers(newmessage...)
 		}
-		log.Println("tickTockWorker end.")
+		//log.Println("tickTockWorker end.")
 	}
 }
 
@@ -221,11 +199,34 @@ func createPlayer(conn net.Conn, id string) {
 		newPlayer.id = id
 		newPlayer.healthPoint = STARTHEALTHPOINT
 		newPlayer.Conn = conn
+		newPlayer.pos = makeRandomPos()
 		newMessage := strconv.Itoa(MSG_YOURID) + ";"
 		newMessage += id + ";\n"
 		players[id] = newPlayer
 		newPlayer.Conn.Write([]byte(newMessage))
+		go readClientData(newPlayer)
 	} else {
 		log.Println("client %s exist.\nWFT?????????", id)
 	}
+}
+
+func readClientData(player *Player) {
+	defer makeDeletePlayerTask(player)
+	reader := bufio.NewReader(player.Conn)
+	for {
+		message, err := reader.ReadString('\n')
+		if err == nil {
+			log.Println("readPlayersInput_____", message)
+			parsePlayersInput(message, player)
+		} else {
+			if err == io.EOF {
+				log.Println("bufio error io.EOF", err)
+			} else {
+				log.Println("bufio unknow error ", err)
+			}
+			log.Println("readPlayersInput player loop err +++")
+			return
+		}
+	}
+
 }

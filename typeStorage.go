@@ -29,8 +29,8 @@ const (
 	STARTHEALTHPOINT int64   = 50
 	WEAPONBASEDAMAGE int64   = 10  //1
 	OBJECTRADIUS     float64 = 1.1 //0.4
-	MINPOS           float64 = -20.5
-	MAXPOS           float64 = 20.5
+	MAX_XPOS         float64 = 20.5
+	MAX_YPOS         float64 = 20.5
 	HPHEALLERP       float64 = 0.5
 )
 

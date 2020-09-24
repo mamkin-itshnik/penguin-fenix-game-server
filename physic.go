@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"math/rand"
 	"strconv"
 )
 
@@ -67,6 +68,12 @@ func getPlayerScore(currentPlayer *Player) []string {
 	message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
 	// message = append(message, "/") //end of player state
 	return message
+}
+func makeRandomPos() Position {
+	var pos Position
+	pos.x = -MAX_XPOS + rand.Float64()*(MAX_XPOS*2.0)
+	pos.y = -MAX_YPOS + rand.Float64()*(MAX_YPOS*2.0)
+	return pos
 }
 
 func (startPoint Position) distance(target Position) float64 {
