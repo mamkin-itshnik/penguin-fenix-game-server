@@ -22,6 +22,12 @@ const (
 	MSG_RESPAWNPLAYER = 4
 )
 
+// message type from client
+const (
+	MSG_CLIENT_WANT_PLAY = 0
+	MSG_CLIENT_WANT_MOVE = 1
+)
+
 // engine shit
 const (
 	MOVESPEED                = 0.3
@@ -56,6 +62,7 @@ type Player struct {
 	scorePoint  int64
 
 	net.Conn
+	isPlay bool
 
 	// from network
 	wannaPos Position

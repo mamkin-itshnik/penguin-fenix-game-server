@@ -130,6 +130,9 @@ func tickTockWorker() {
 		log.Println("tic player count:", len(players))
 		//make some physics works
 		for _, player := range players {
+			if !player.isPlay {
+				continue
+			}
 			makePlayerPos(player)
 			playerMsg := getPlayerPosMsg(player)
 			newmessage = append(newmessage, prepareMsg(playerMsg...))
@@ -156,6 +159,8 @@ func sendToPlayers(parts ...string) {
 }
 
 func parsePlayersInput(str string, currentPlayer *Player) {
+
+	//println("player input = ", str)
 	strArr := strings.Split(str, ";")
 	if len(strArr) < 2 {
 		println("player str input len = ", len(strArr))
@@ -165,7 +170,7 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 
 	switch {
 	// case strArr[0] == "0":
-	case strArr[0] == "2": // player moves
+	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_MOVE, 10): // player moves
 		if len(strArr) < 4 {
 			println("player str input len = ", len(strArr))
 			println("player str =", str)
@@ -183,7 +188,29 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 		currentPlayer.wannaPos.y = y
 		currentPlayer.wannaPos.angle = angle
 		currentPlayer.wannaPos.isAttack = isAttack
-	// case strArr[0] == "3":
+	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_PLAY, 10): // player go in play
+		isPlay, err_Play := strconv.ParseBool(strArr[1])
+		if err_Play != nil {
+			return
+		}
+		currentPlayer.isPlay = isPlay
+		if currentPlayer.isPlay {
+			newMessage := strconv.Itoa(MSG_YOURID) + ";"
+			newMessage += currentPlayer.id + "$"
+			currentPlayer.Conn.Write([]byte(newMessage))
+			println("player want play", str)
+			println("player is play =", currentPlayer.isPlay)
+			var startTask Task
+			startTask.clientId = currentPlayer.id
+			startTask.taskType = TASK_RESPAWNCLIENT
+			taskChan <- startTask
+		} else {
+			//---- delete player from other player in client
+			var newTask Task
+			newTask.taskType = TASK_DELCLIENT
+			newTask.clientId = currentPlayer.id
+			taskChan <- newTask
+		}
 	default:
 		log.Println("WTF? There shouldn't be default value")
 		return
@@ -199,11 +226,9 @@ func createPlayer(conn net.Conn, id string) {
 		newPlayer.id = id
 		newPlayer.healthPoint = STARTHEALTHPOINT
 		newPlayer.Conn = conn
-		newPlayer.pos = makeRandomPos()
-		newMessage := strconv.Itoa(MSG_YOURID) + ";"
-		newMessage += id + ";\n"
+		newPlayer.isPlay = false
+		//newPlayer.pos = makeRandomPos()
 		players[id] = newPlayer
-		newPlayer.Conn.Write([]byte(newMessage))
 		go readClientData(newPlayer)
 	} else {
 		log.Println("client %s exist.\nWFT?????????", id)
