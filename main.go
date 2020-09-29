@@ -169,8 +169,8 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 	}
 
 	switch {
-	// case strArr[0] == "0":
-	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_MOVE, 10): // player moves
+	// player moves
+	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_MOVE, 10):
 		if len(strArr) < 4 {
 			println("player str input len = ", len(strArr))
 			println("player str =", str)
@@ -188,11 +188,28 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 		currentPlayer.wannaPos.y = y
 		currentPlayer.wannaPos.angle = angle
 		currentPlayer.wannaPos.isAttack = isAttack
-	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_PLAY, 10): // player go in play
-		isPlay, err_Play := strconv.ParseBool(strArr[1])
-		if err_Play != nil {
+
+		// player go in play
+	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_PLAY, 10):
+		if len(strArr) < 4 {
+			println("read less arg onto needed for player starts = ", len(strArr))
 			return
 		}
+		isPlay, err_Play := strconv.ParseBool(strArr[1])
+		if err_Play != nil {
+			println("isPlay, err_Play := strconv.ParseBool(strArr[1]) = ERROR", err_Play.Error)
+			return
+		}
+		newNikName := (strArr[2])
+
+		newSkinID, err_skinID := strconv.ParseInt(strArr[3], 10, 64)
+		if err_skinID != nil {
+			println("newSkinID, err_skinID := strconv.ParseInt(strArr[3], 10, 64) = ERROR", err_skinID.Error)
+			return
+		}
+
+		currentPlayer.skinID = newSkinID
+		currentPlayer.nikName = newNikName
 		currentPlayer.isPlay = isPlay
 		if currentPlayer.isPlay {
 			newMessage := strconv.Itoa(MSG_YOURID) + ";"

@@ -55,14 +55,15 @@ type Player struct {
 
 	// by engine
 	id          string
-	skin        int64
-	nickname    string
 	pos         Position
 	healthPoint int64
 	scorePoint  int64
 
+	// multiplayer data
 	net.Conn
-	isPlay bool
+	isPlay  bool
+	nikName string
+	skinID  int64
 
 	// from network
 	wannaPos Position

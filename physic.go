@@ -65,6 +65,7 @@ func getPlayerScore(currentPlayer *Player) []string {
 	var message []string
 	message = append(message, strconv.FormatInt(MSG_HISCORE, 10))
 	message = append(message, currentPlayer.id)
+	message = append(message, currentPlayer.nikName)
 	message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
 	// message = append(message, "/") //end of player state
 	return message
