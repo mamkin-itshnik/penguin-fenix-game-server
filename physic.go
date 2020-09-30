@@ -25,7 +25,7 @@ func makePlayerPos(currentPlayer *Player) {
 					if otherPlayer.healthPoint < 0 {
 
 						//--- Score++ HP++
-						currentPlayer.scorePoint += (otherPlayer.scorePoint / 2) + 10
+						currentPlayer.scorePoint += 100
 						currentPlayer.healthPoint += int64(HPHEALLERP *
 							float64(STARTHEALTHPOINT-currentPlayer.healthPoint))
 
@@ -55,9 +55,6 @@ func getPlayerPosMsg(currentPlayer *Player) []string {
 	message = append(message, strconv.FormatInt(int64(currentPlayer.pos.angle), 10))
 	message = append(message, strconv.FormatInt(currentPlayer.healthPoint, 10))
 	message = append(message, strconv.FormatBool(currentPlayer.pos.isAttack))
-	// message = append(message, "/") //end of player state
-	// NOTICE - no more score point in player pos
-	//message = append(message, strconv.FormatInt(int64(currentPlayer.scorePoint), 10))
 	return message
 }
 

@@ -38,6 +38,7 @@ const (
 	MAX_XPOS         float64 = 20.5
 	MAX_YPOS         float64 = 20.5
 	HPHEALLERP       float64 = 0.5
+	MAXSCORELINE     int64   = 5
 )
 
 // some constants

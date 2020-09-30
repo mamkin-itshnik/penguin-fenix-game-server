@@ -98,21 +98,31 @@ func taskWorker() {
 				// make random state
 				player.healthPoint = STARTHEALTHPOINT
 				player.pos = makeRandomPos()
-				player.scorePoint = 0
+				player.scorePoint /= 2
 
 				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_RESPAWNPLAYER, 10), newTask.clientId))
 			}
 		case TASK_UPDATESCORE:
 			{
-				var newmessage []string
+				var allScoreMsg string
 				log.Println("update player task:", len(players))
 				//make score array
+				var lineCount int64
 				for _, player := range players {
+					// set limit for score table view
+					lineCount++
+					if lineCount >= MAXSCORELINE {
+						break
+					}
 					playerMsg := getPlayerScore(player)
-					newmessage = append(newmessage, prepareMsg(playerMsg...))
+					allScoreMsg += prepareMsg(playerMsg...)
+
+					// split players score in one message.
+					allScoreMsg += "#"
+
 				}
-				if len(newmessage) != 0 {
-					sendToPlayers(newmessage...)
+				if len(allScoreMsg) != 0 {
+					sendToPlayers(allScoreMsg)
 				}
 			}
 		}
@@ -150,6 +160,7 @@ func prepareMsg(parts ...string) string {
 
 func sendToPlayers(parts ...string) {
 	msg := strings.Join(parts, "/")
+	// ADD stop byte as $ symbol
 	msg += "$"
 	log.Println("send to all:", msg)
 	for _, pl := range players {
@@ -169,7 +180,7 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 	}
 
 	switch {
-	// player moves
+	//---------------------------------------------------------------- player moves
 	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_MOVE, 10):
 		if len(strArr) < 4 {
 			println("player str input len = ", len(strArr))
@@ -189,7 +200,7 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 		currentPlayer.wannaPos.angle = angle
 		currentPlayer.wannaPos.isAttack = isAttack
 
-		// player go in play
+		// --------------------------------------------------------------player go in play
 	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_PLAY, 10):
 		if len(strArr) < 4 {
 			println("read less arg onto needed for player starts = ", len(strArr))
@@ -217,10 +228,17 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 			currentPlayer.Conn.Write([]byte(newMessage))
 			println("player want play", str)
 			println("player is play =", currentPlayer.isPlay)
+
 			var startTask Task
 			startTask.clientId = currentPlayer.id
 			startTask.taskType = TASK_RESPAWNCLIENT
 			taskChan <- startTask
+
+			//Player's start task
+			var scoreTask Task
+			scoreTask.clientId = currentPlayer.id
+			scoreTask.taskType = TASK_UPDATESCORE
+			taskChan <- scoreTask
 		} else {
 			//---- delete player from other player in client
 			var newTask Task
@@ -243,6 +261,7 @@ func createPlayer(conn net.Conn, id string) {
 		newPlayer.id = id
 		newPlayer.healthPoint = STARTHEALTHPOINT
 		newPlayer.Conn = conn
+		newPlayer.scorePoint = 0
 		newPlayer.isPlay = false
 		//newPlayer.pos = makeRandomPos()
 		players[id] = newPlayer
