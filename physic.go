@@ -9,9 +9,19 @@ import (
 func makePlayerPos(currentPlayer *Player) {
 
 	//-----------------------------------------------POSITION
+	//collision logic
+	isCollision, point := checkCollision(currentPlayer.pos.x+currentPlayer.wannaPos.x*MOVESPEED,
+		currentPlayer.pos.y+currentPlayer.wannaPos.y*MOVESPEED)
 
-	currentPlayer.pos.x += (currentPlayer.wannaPos.x * MOVESPEED)
-	currentPlayer.pos.y += (currentPlayer.wannaPos.y * MOVESPEED)
+	if isCollision {
+		//COLLISION BLYAT'
+		currentPlayer.pos.x = point.X
+		currentPlayer.pos.y = point.Y
+	} else {
+		//WSE ZAEBOK =)
+		currentPlayer.pos.x += (currentPlayer.wannaPos.x * MOVESPEED)
+		currentPlayer.pos.y += (currentPlayer.wannaPos.y * MOVESPEED)
+	}
 	currentPlayer.pos.angle = currentPlayer.wannaPos.angle
 	currentPlayer.pos.isAttack = currentPlayer.wannaPos.isAttack
 
