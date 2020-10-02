@@ -5,7 +5,9 @@ import (
 	"log"
 	"math"
 
-	"./collision2d"
+	//"./collision2d"
+	//"github.com/Tarliton/collision2d""
+	"github.com/mamkin-itshnik/collision2d"
 )
 
 //---------------------------------OBJECT IN LEVEL

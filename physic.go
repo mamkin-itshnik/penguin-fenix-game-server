@@ -17,7 +17,7 @@ func makePlayerPos(currentPlayer *Player) {
 
 	if isCollision {
 		//COLLISION BLYAT'
-		fmt.Println("Detect real collision ", point.X, " ", point.Y)
+		fmt.Println("Detect real collision  ", point.X, " ", point.Y)
 		log.Println("Detect real collision ", point.X, " ", point.Y)
 		currentPlayer.pos.x = point.X
 		currentPlayer.pos.y = point.Y
