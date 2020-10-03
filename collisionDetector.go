@@ -5,9 +5,8 @@ import (
 	"log"
 	"math"
 
-	//"./collision2d"
-	//"github.com/Tarliton/collision2d""
-	"github.com/mamkin-itshnik/collision2d"
+	"./collision2d"
+	//"github.com/mamkin-itshnik/collision2d"
 )
 
 //---------------------------------OBJECT IN LEVEL
@@ -15,20 +14,19 @@ import (
 var circleArray []collision2d.Circle
 
 //boxes
-//..........
+var boxsArray []collision2d.Box
 
 func init() {
 
 	fmt.Println("Create collision detector ")
-	//memory allocate
-	//circleArray := make([]collision2d.Circle, 5)
-	fmt.Println("circles count = ", len(circleArray))
 
 	//---------------------------------------- Create objects
 	// circles
-	//circleArray[0] = collision2d.NewCircle(collision2d.NewVector(0, 0), 10)
 	circleArray = append(circleArray, collision2d.Circle{collision2d.Vector{0, 0}, 2})
-	fmt.Println("circles count = ", len(circleArray))
+
+	//boxes
+	boxsArray = append(boxsArray, collision2d.Box{collision2d.Vector{0, 36}, 100, 1})
+
 }
 
 func c_checkCollisionInCircles(point collision2d.Vector) (bool, collision2d.Vector) {
@@ -43,6 +41,24 @@ func c_checkCollisionInCircles(point collision2d.Vector) (bool, collision2d.Vect
 			k := circle.R / math.Sqrt(math.Pow(dX2, 2)+math.Pow(dY2, 2))
 			newX := circle.Pos.X - dX2*k
 			newY := circle.Pos.Y - dY2*k
+			return true, collision2d.NewVector(newX, newY)
+		}
+	}
+	return false, collision2d.NewVector(0, 0)
+}
+
+func c_checkCollisionInBoxes(point collision2d.Vector) (bool, collision2d.Vector) {
+
+	for _, box := range boxsArray {
+		if collision2d.PointInPolygon(point, box.ToPolygon()) {
+			// TODO - make nearest point
+
+			for _, qwe := range box.ToPolygon().Edges {
+
+			}
+
+			newX := 0.0
+			newY := 0.0
 			return true, collision2d.NewVector(newX, newY)
 		}
 	}
