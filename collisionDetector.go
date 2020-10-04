@@ -5,27 +5,32 @@ import (
 	"log"
 	"math"
 
-	"./collision2d"
-	//"github.com/mamkin-itshnik/collision2d"
+	//"./collision2d"
+	"github.com/mamkin-itshnik/collision2d"
 )
 
 //---------------------------------OBJECT IN LEVEL
+//lines
+var topLine float64
+var downLine float64
+var leftLine float64
+var rightLine float64
+
 //circles
 var circleArray []collision2d.Circle
-
-//boxes
-var boxsArray []collision2d.Box
 
 func init() {
 
 	fmt.Println("Create collision detector ")
 
 	//---------------------------------------- Create objects
+	//lines
+	topLine = 35.0
+	downLine = -34.0
+	leftLine = -34.0
+	rightLine = 33.0
 	// circles
 	circleArray = append(circleArray, collision2d.Circle{collision2d.Vector{0, 0}, 2})
-
-	//boxes
-	boxsArray = append(boxsArray, collision2d.Box{collision2d.Vector{0, 36}, 100, 1})
 
 }
 
@@ -47,20 +52,36 @@ func c_checkCollisionInCircles(point collision2d.Vector) (bool, collision2d.Vect
 	return false, collision2d.NewVector(0, 0)
 }
 
-func c_checkCollisionInBoxes(point collision2d.Vector) (bool, collision2d.Vector) {
+func c_checkCollisionInLines(point collision2d.Vector) (bool, collision2d.Vector) {
 
-	for _, box := range boxsArray {
-		if collision2d.PointInPolygon(point, box.ToPolygon()) {
-			// TODO - make nearest point
-
-			for _, qwe := range box.ToPolygon().Edges {
-
-			}
-
-			newX := 0.0
-			newY := 0.0
-			return true, collision2d.NewVector(newX, newY)
-		}
+	// TOP
+	fmt.Println("ckeck collision on TOP ", point.Y)
+	topCollision := false
+	downCollision := false
+	leftCollision := false
+	rightCollision := false
+	newVector := collision2d.NewVector(point.X, point.Y)
+	if point.Y > topLine {
+		newVector.Y = topLine
+		topCollision = true
+	}
+	// DOWN
+	if point.Y < downLine {
+		newVector.Y = downLine
+		downCollision = true
+	}
+	// LEFT
+	if point.X < leftLine {
+		newVector.X = leftLine
+		leftCollision = true
+	}
+	// RIGHT
+	if point.X > rightLine {
+		newVector.X = rightLine
+		rightCollision = true
+	}
+	if topCollision || downCollision || leftCollision || rightCollision {
+		return true, newVector
 	}
 	return false, collision2d.NewVector(0, 0)
 }
@@ -70,9 +91,15 @@ func checkCollision(x, y float64) (bool, collision2d.Vector) {
 
 	// check all circles
 	//fmt.Println("ckeck collision")
-	isCollision, point := c_checkCollisionInCircles(collision2d.NewVector(x, y))
-	if isCollision {
-		return isCollision, point
+	//fmt.Println("ckeck collision")
+	isCollisionCircle, pointCircle := c_checkCollisionInCircles(collision2d.NewVector(x, y))
+	if isCollisionCircle {
+		return isCollisionCircle, pointCircle
+	}
+	//	fmt.Println("ckeck collision on line")
+	isCollisionLine, pointOnLine := c_checkCollisionInLines(collision2d.NewVector(x, y))
+	if isCollisionLine {
+		return isCollisionLine, pointOnLine
 	}
 
 	return false, collision2d.NewVector(0, 0)

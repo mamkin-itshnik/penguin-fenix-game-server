@@ -30,7 +30,7 @@ const (
 
 // engine shit
 const (
-	MOVESPEED                = 0.3
+	MOVESPEED                = 0.6 // 0.3 standart
 	SHOOTDISTANCE            = 40.0
 	STARTHEALTHPOINT int64   = 50
 	WEAPONBASEDAMAGE int64   = 10  //1

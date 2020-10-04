@@ -6,6 +6,8 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
+
+	"github.com/mamkin-itshnik/collision2d"
 )
 
 func makePlayerPos(currentPlayer *Player) {
@@ -107,8 +109,14 @@ func (startPoint Position) distance(target Position) float64 {
 	if foreward_distance > backward_distance {
 		distance = math.Sqrt(math.Pow((startPoint.x-target.x), 2) + math.Pow((startPoint.y-target.y), 2))
 	} else {
-		distance = ((startPoint.y-endPointY)*target.x + (endPointX-startPoint.x)*target.y + (endPointY*startPoint.x - endPointX*startPoint.y)) /
-			math.Sqrt(math.Pow((endPointX-startPoint.x), 2)+math.Pow((endPointY-startPoint.y), 2))
+		distance = edgeDistance(collision2d.Vector{
+			startPoint.x, startPoint.y},
+			collision2d.Vector{endPointX, endPointY},
+			collision2d.Vector{target.x, target.y})
+
+		//distance = ((startPoint.y-endPointY)*target.x + (endPointX-startPoint.x)*target.y + (endPointY*startPoint.x - endPointX*startPoint.y)) /
+		//	math.Sqrt(math.Pow((endPointX-startPoint.x), 2)+math.Pow((endPointY-startPoint.y), 2))
+
 		//fmt.Printf("TARGET   %d : %d \n", target.x, target.y)
 		//fmt.Printf("___________________ \n")
 		//fmt.Printf("distanse = %d \n", distance)
@@ -120,5 +128,15 @@ func (startPoint Position) distance(target Position) float64 {
 	//fmt.Printf("distanse = %d \n", distance)
 	distance = (math.Abs(distance) - OBJECTRADIUS)
 	//fmt.Printf("distanse = %d \n", distance)
+	return distance
+}
+
+func edgeDistance(startPoint, endPoint, targetPoint collision2d.Vector) float64 {
+
+	var distance float64
+
+	distance = ((startPoint.Y-endPoint.Y)*targetPoint.X +
+		(endPoint.X-startPoint.X)*targetPoint.Y + (endPoint.Y*startPoint.X - endPoint.X*startPoint.Y)) /
+		math.Sqrt(math.Pow((endPoint.X-startPoint.X), 2)+math.Pow((endPoint.Y-startPoint.Y), 2))
 	return distance
 }
