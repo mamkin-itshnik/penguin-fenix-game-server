@@ -25,9 +25,9 @@ func init() {
 
 	//---------------------------------------- Create objects
 	//lines
-	topLine = 35.0
+	topLine = 34.5
 	downLine = -34.0
-	leftLine = -34.0
+	leftLine = -39.0
 	rightLine = 33.0
 	// circles
 	circleArray = append(circleArray, collision2d.Circle{collision2d.Vector{0, 0}, 2})
