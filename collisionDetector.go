@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
 
 	//"./collision2d"
@@ -37,7 +36,7 @@ func init() {
 func c_checkCollisionInCircles(point collision2d.Vector) (bool, collision2d.Vector) {
 
 	//fmt.Println("ckeck collision in circles. circles count = ", len(circleArray))
-	log.Println("TRY detect  collision ", point.X, " ", point.Y)
+	//log.Println("TRY detect  collision ", point.X, " ", point.Y)
 	for _, circle := range circleArray {
 		if collision2d.PointInCircle(point, circle) {
 			// TODO - make nearest point
@@ -55,7 +54,7 @@ func c_checkCollisionInCircles(point collision2d.Vector) (bool, collision2d.Vect
 func c_checkCollisionInLines(point collision2d.Vector) (bool, collision2d.Vector) {
 
 	// TOP
-	fmt.Println("ckeck collision on TOP ", point.Y)
+	//fmt.Println("ckeck collision on TOP ", point.Y)
 	topCollision := false
 	downCollision := false
 	leftCollision := false

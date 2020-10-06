@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"math"
 	"math/rand"
 	"strconv"
@@ -19,13 +17,13 @@ func makePlayerPos(currentPlayer *Player) {
 
 	if isCollision {
 		//COLLISION BLYAT'
-		fmt.Println("Detect real collision  ", point.X, " ", point.Y)
-		log.Println("Detect real collision ", point.X, " ", point.Y)
+		//	fmt.Println("Detect real collision  ", point.X, " ", point.Y)
+		//	log.Println("Detect real collision ", point.X, " ", point.Y)
 		currentPlayer.pos.x = point.X
 		currentPlayer.pos.y = point.Y
 	} else {
 		//WSE ZAEBOK =)
-		log.Println("none collision ", point.X, " ", point.Y)
+		//log.Println("none collision ", point.X, " ", point.Y)
 		currentPlayer.pos.x += (currentPlayer.wannaPos.x * MOVESPEED)
 		currentPlayer.pos.y += (currentPlayer.wannaPos.y * MOVESPEED)
 	}
