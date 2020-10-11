@@ -1,0 +1,473 @@
+Create collision detector 
+startServer
+init botsFather
+start botsFather 
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_0
+ADD new enemy  ID_1
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_2
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_3
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_4
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_5
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_6
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_7
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_8
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_9
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_10
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_11
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_12
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_13
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_14
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_15
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_16
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_17
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_18
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_19
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_20
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_21
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_22
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_23
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_24
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_25
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_26
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_27
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_28
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_29
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_30
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_31
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_32
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_33
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_34
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_35
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_36
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_37
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_38
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_39
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_40
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_41
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_42
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_43
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_44
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_45
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_46
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_47
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_48
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_49
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_50
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_51
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_52
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_53
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_54
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_55
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_56
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_57
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_58
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_59
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_60
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_61
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_62
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_63
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_64
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_65
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_66
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_67
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_68
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_69
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_70
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_71
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_72
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_73
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_74
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_75
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_76
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_77
+try addBot
+try send First Message from bot
+readPlayersInput_____
+Message is sended
+end addBot
+ADD new enemy  ID_78

@@ -33,10 +33,10 @@ const (
 	MOVESPEED                = 0.6 // 0.3 standart
 	SHOOTDISTANCE            = 40.0
 	STARTHEALTHPOINT int64   = 50
-	WEAPONBASEDAMAGE int64   = 10  //1
-	OBJECTRADIUS     float64 = 1.1 //0.4
-	MAX_XPOS         float64 = 20.5
-	MAX_YPOS         float64 = 20.5
+	WEAPONBASEDAMAGE int64   = 1    //1
+	OBJECTRADIUS     float64 = 1.1  //0.4
+	MAX_XPOS         float64 = 35.5 // 20.0
+	MAX_YPOS         float64 = 35.5 // 20.0
 	HPHEALLERP       float64 = 0.5
 	MAXSCORELINE     int64   = 5
 )

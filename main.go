@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -16,6 +17,8 @@ var wg sync.WaitGroup
 var players map[string]*Player
 var taskChan chan Task
 
+var playersMutex sync.RWMutex
+
 func main() {
 
 	wg.Add(1)
@@ -25,18 +28,20 @@ func main() {
 
 	arg := os.Args[1] //0.0.0.0:8080
 	//---------------------------------------------------------LOG file setup
-	f, err := os.OpenFile("penguin_royale_logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	/*f, err := os.OpenFile("penguin_royale_logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
 	defer f.Close()
 	log.SetOutput(f)
-	log.Println("This is a test log entry")
+	log.Println("This is a test log entry")*/
 	//----------------------------------------------------------END setup logfile
 
+	fmt.Println("startServer")
 	go startServer(arg)
 	go taskWorker()
 	go tickTockWorker()
+	//initBotFather()
 
 	wg.Wait()
 }
@@ -57,8 +62,9 @@ func startServer(arg string) {
 		if err != nil {
 			log.Printf("error accepting connection %v", err)
 		} else {
-			createPlayer(conn, "ID_"+strconv.Itoa(i))
 			log.Println("accepted connection from ", conn.RemoteAddr())
+			fmt.Println("accepted connection from ", conn.RemoteAddr())
+			createPlayer(conn, "ID_"+strconv.Itoa(i))
 			i++
 		}
 	}
@@ -70,7 +76,11 @@ func makeDeletePlayerTask(player *Player) {
 	newTask.taskType = TASK_DELCLIENT
 	newTask.clientId = player.id
 	player.Conn.Close()
+
+	playersMutex.Lock()
 	delete(players, newTask.clientId)
+	playersMutex.Unlock()
+
 	taskChan <- newTask
 }
 
@@ -82,14 +92,19 @@ func taskWorker() {
 		case TASK_DELCLIENT:
 			{
 				log.Println("func core_DelPlayer(playerID string)")
+
+				playersMutex.RLock()
 				log.Println("NOW PLAYER COUNT = ", len(players))
+				playersMutex.RUnlock()
 
 				sendToPlayers(prepareMsg(strconv.FormatInt(MSG_KILLPLAYER, 10), newTask.clientId))
 			}
 
 		case TASK_RESPAWNCLIENT:
 			{
+				playersMutex.RLock()
 				player, ok := players[newTask.clientId]
+				playersMutex.RUnlock()
 				if !ok {
 					log.Println("WTF? Respawn player that doesn't exist in map",
 						newTask.clientId)
@@ -105,15 +120,17 @@ func taskWorker() {
 		case TASK_UPDATESCORE:
 			{
 				var allScoreMsg string
+
+				playersMutex.RLock()
 				log.Println("update player task:", len(players))
+				playersMutex.RUnlock()
 				//make score array
-				var lineCount int64
+				//var lineCount int64
+				fmt.Println("_______________000000000000000000_________")
+				playersMutex.Lock()
+				fmt.Println("_______________111111111111111111_________")
 				for _, player := range players {
-					// set limit for score table view
-					lineCount++
-					if lineCount >= MAXSCORELINE {
-						break
-					}
+					fmt.Println("_______________ZZZZZZZZZZZ_________", player.id)
 					playerMsg := getPlayerScore(player)
 					allScoreMsg += prepareMsg(playerMsg...)
 
@@ -121,6 +138,9 @@ func taskWorker() {
 					allScoreMsg += "#"
 
 				}
+				playersMutex.Unlock()
+				fmt.Println("_______________END PREPARE UPD HISCORE MAG_________")
+
 				if len(allScoreMsg) != 0 {
 					sendToPlayers(allScoreMsg)
 				}
@@ -137,8 +157,12 @@ func tickTockWorker() {
 		time.Sleep(time.Millisecond * TICKPERIOD)
 		newmessage = newmessage[:0]
 
+		playersMutex.RLock()
 		log.Println("tic player count:", len(players))
+		playersMutex.RUnlock()
+
 		//make some physics works
+		playersMutex.Lock()
 		for _, player := range players {
 			if !player.isPlay {
 				continue
@@ -147,6 +171,8 @@ func tickTockWorker() {
 			playerMsg := getPlayerPosMsg(player)
 			newmessage = append(newmessage, prepareMsg(playerMsg...))
 		}
+		playersMutex.Unlock()
+
 		if len(newmessage) != 0 {
 			sendToPlayers(newmessage...)
 		}
@@ -163,10 +189,12 @@ func sendToPlayers(parts ...string) {
 	// ADD stop byte as $ symbol
 	msg += "$"
 	log.Println("send to all:", msg)
+	playersMutex.Lock()
 	for _, pl := range players {
-		log.Println("really send")
+		//log.Println("really send")
 		pl.Conn.Write([]byte(msg))
 	}
+	playersMutex.Unlock()
 }
 
 func parsePlayersInput(str string, currentPlayer *Player) {
@@ -195,10 +223,12 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 			return
 		}
 
+		playersMutex.Lock()
 		currentPlayer.wannaPos.x = x
 		currentPlayer.wannaPos.y = y
 		currentPlayer.wannaPos.angle = angle
 		currentPlayer.wannaPos.isAttack = isAttack
+		playersMutex.Unlock()
 
 		// --------------------------------------------------------------player go in play
 	case strArr[0] == strconv.FormatInt(MSG_CLIENT_WANT_PLAY, 10):
@@ -219,15 +249,24 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 			return
 		}
 
+		playersMutex.Lock()
 		currentPlayer.skinID = newSkinID
 		currentPlayer.nikName = newNikName
 		currentPlayer.isPlay = isPlay
+		playersMutex.Unlock()
+
+		playersMutex.Lock()
 		if currentPlayer.isPlay {
+			playersMutex.Unlock()
 			newMessage := strconv.Itoa(MSG_YOURID) + ";"
 			newMessage += currentPlayer.id + "$"
+
+			playersMutex.Lock()
 			currentPlayer.Conn.Write([]byte(newMessage))
+			playersMutex.Unlock()
+
 			println("player want play", str)
-			println("player is play =", currentPlayer.isPlay)
+			//println("player is play =", currentPlayer.isPlay)
 
 			var startTask Task
 			startTask.clientId = currentPlayer.id
@@ -240,6 +279,7 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 			scoreTask.taskType = TASK_UPDATESCORE
 			taskChan <- scoreTask
 		} else {
+			playersMutex.Unlock()
 			//---- delete player from other player in client
 			var newTask Task
 			newTask.taskType = TASK_DELCLIENT
@@ -253,8 +293,10 @@ func parsePlayersInput(str string, currentPlayer *Player) {
 }
 
 func createPlayer(conn net.Conn, id string) {
-	if _, ok := players[id]; !ok {
 
+	playersMutex.Lock()
+	if _, ok := players[id]; !ok {
+		playersMutex.Unlock()
 		log.Println("createPlayer %s", id)
 
 		var newPlayer *Player = new(Player)
@@ -264,11 +306,21 @@ func createPlayer(conn net.Conn, id string) {
 		newPlayer.scorePoint = 0
 		newPlayer.isPlay = false
 		//newPlayer.pos = makeRandomPos()
+
+		//log.Println("Try lock")
+		//playersMutex.Lock()
+
 		players[id] = newPlayer
+
+		//playersMutex.Unlock()
+		//log.Println("UNlock")
+
 		go readClientData(newPlayer)
 	} else {
+		playersMutex.Unlock()
 		log.Println("client %s exist.\nWFT?????????", id)
 	}
+
 }
 
 func readClientData(player *Player) {
@@ -277,7 +329,7 @@ func readClientData(player *Player) {
 	for {
 		message, err := reader.ReadString('\n')
 		if err == nil {
-			log.Println("readPlayersInput_____", message)
+			//log.Println("readPlayersInput_____ ", player.id, message)
 			parsePlayersInput(message, player)
 		} else {
 			if err == io.EOF {

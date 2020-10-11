@@ -5,7 +5,10 @@ import (
 	"math/rand"
 	"strconv"
 
-	"github.com/mamkin-itshnik/collision2d"
+	//"fmt"
+
+	"./collision2d"
+	//"github.com/mamkin-itshnik/collision2d"
 )
 
 func makePlayerPos(currentPlayer *Player) {
@@ -32,6 +35,7 @@ func makePlayerPos(currentPlayer *Player) {
 
 	//-----------------------------------------------SHOOT
 	if currentPlayer.pos.isAttack {
+		//playersMutex.Lock()
 		for id_other, otherPlayer := range players {
 			if id_other != currentPlayer.id {
 				dist := currentPlayer.pos.distance(otherPlayer.pos)
@@ -58,6 +62,7 @@ func makePlayerPos(currentPlayer *Player) {
 				}
 			}
 		}
+		//playersMutex.Unlock()
 	}
 }
 

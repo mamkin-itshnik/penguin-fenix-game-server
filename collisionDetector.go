@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
-	//"./collision2d"
-	"github.com/mamkin-itshnik/collision2d"
+	"./collision2d"
+	//"github.com/mamkin-itshnik/collision2d"
 )
 
 //---------------------------------OBJECT IN LEVEL
@@ -26,7 +26,7 @@ func init() {
 	//lines
 	topLine = 34.5
 	downLine = -34.0
-	leftLine = -39.0
+	leftLine = -51.0
 	rightLine = 33.0
 	// circles
 	circleArray = append(circleArray, collision2d.Circle{collision2d.Vector{0, 0}, 2})
